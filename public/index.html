@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Griffith Fracture Mechanics</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Griffith</h1>
+        <p>Fracture Mechanics & Critical Flaw Analysis Tool</p>
+    </header>
+
+    <main>
+        <section id="sif-calculator">
+            <h2>Stress Intensity Factor Calculator</h2>
+            <div class="input-group">
+                <label for="geometry">Geometry:</label>
+                <select id="geometry">
+                    <option value="CCT">Center Cracked Plate (CCT)</option>
+                </select>
+
+                <label for="width">Width (m):</label>
+                <input type="number" id="width" value="0.1" step="0.01">
+
+                <label for="crack-length">Crack Length 2a (m):</label>
+                <input type="number" id="crack-length" value="0.02" step="0.001">
+
+                <label for="stress">Remote Stress (Pa):</label>
+                <input type="number" id="stress" value="200000000" step="1000000">
+
+                <button onclick="calculateSIF()">Calculate K_I</button>
+            </div>
+            <div id="sif-result" class="result"></div>
+            <canvas id="crack-viewer" width="400" height="300"></canvas>
+        </section>
+
+        <section id="fatigue-calculator">
+            <h2>Fatigue Life Prediction (Paris Law)</h2>
+            <div class="input-group">
+                <label for="c-paris">C (MPa units):</label>
+                <input type="number" id="c-paris" value="1.5e-11" step="1e-12">
+
+                <label for="m-paris">m:</label>
+                <input type="number" id="m-paris" value="3.0" step="0.1">
+
+                <label for="stress-range">Stress Range (Pa):</label>
+                <input type="number" id="stress-range" value="150000000" step="1000000">
+
+                <label for="a-initial">Initial Crack (m):</label>
+                <input type="number" id="a-initial" value="0.002" step="0.001">
+
+                <label for="a-final">Final Crack (m):</label>
+                <input type="number" id="a-final" value="0.020" step="0.001">
+
+                <button onclick="calculateFatigue()">Predict Cycles</button>
+            </div>
+            <div id="fatigue-result" class="result"></div>
+            <div id="fatigue-plot"></div>
+        </section>
+
+        <section id="r-curve-calculator">
+            <h2>R-Curve Analysis (Stability)</h2>
+            <p>Material Resistance: R = 150 + 400 * sqrt(da) (kJ/m²)</p>
+            <div class="input-group">
+                 <label for="r-initial-crack">Initial Crack (m):</label>
+                 <input type="number" id="r-initial-crack" value="0.05" step="0.01">
+
+                 <label for="r-modulus">Young's Modulus (Pa):</label>
+                 <input type="number" id="r-modulus" value="200000000000" step="1e9">
+
+                 <button onclick="calculateRCurve()">Analyze Stability</button>
+            </div>
+            <div id="r-curve-result" class="result"></div>
+        </section>
+    </main>
+
+    <script src="crack_viewer.js"></script>
+    <script src="growth_plot.js"></script>
+    <script>
+        async function calculateSIF() {
+            const geometry = document.getElementById('geometry').value;
+            const width = parseFloat(document.getElementById('width').value);
+            const crackLength = parseFloat(document.getElementById('crack-length').value);
+            const stress = parseFloat(document.getElementById('stress').value);
+
+            try {
+                const response = await fetch('/api/calculate-sif', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ geometry, width, crack_length: crackLength, stress })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('sif-result').innerText = `K_I = ${(data.k1/1e6).toFixed(2)} MPa√m`;
+                    drawCrack(width, crackLength);
+                } else {
+                    document.getElementById('sif-result').innerText = `Error: ${data.detail}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('sif-result').innerText = "Error connecting to API.";
+            }
+        }
+
+        async function calculateFatigue() {
+            const c = parseFloat(document.getElementById('c-paris').value);
+            const m = parseFloat(document.getElementById('m-paris').value);
+            const stressRange = parseFloat(document.getElementById('stress-range').value);
+            const aInitial = parseFloat(document.getElementById('a-initial').value);
+            const aFinal = parseFloat(document.getElementById('a-final').value);
+            const geometryFactor = 1.12;
+
+            try {
+                const response = await fetch('/api/calculate-fatigue', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        c, m, stress_range: stressRange,
+                        a_initial: aInitial, a_final: aFinal,
+                        geometry_factor: geometryFactor,
+                        stress_unit: "Pa" // API heuristic will handle conversion if needed
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('fatigue-result').innerText = `Remaining Cycles: ${Math.round(data.cycles).toLocaleString()}`;
+                    plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor);
+                } else {
+                    document.getElementById('fatigue-result').innerText = `Error: ${data.detail}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('fatigue-result').innerText = "Error connecting to API.";
+            }
+        }
+
+        async function calculateRCurve() {
+            const initialCrack = parseFloat(document.getElementById('r-initial-crack').value);
+            const youngsModulus = parseFloat(document.getElementById('r-modulus').value);
+
+            try {
+                const response = await fetch('/api/calculate-r-curve', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        initial_crack: initialCrack,
+                        youngs_modulus: youngsModulus
+                    })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    if (data.critical_stress) {
+                        document.getElementById('r-curve-result').innerText =
+                            `Critical Stress: ${(data.critical_stress/1e6).toFixed(2)} MPa, Extension: ${(data.critical_extension*1000).toFixed(2)} mm`;
+                    } else {
+                        document.getElementById('r-curve-result').innerText = data.message;
+                    }
+                } else {
+                    document.getElementById('r-curve-result').innerText = "Error calculating R-Curve.";
+                }
+            } catch (error) {
+                 console.error('Error:', error);
+                 document.getElementById('r-curve-result').innerText = "Error connecting to API.";
+            }
+        }
+    </script>
+</body>
+</html>
