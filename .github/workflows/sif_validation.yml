@@ -17,5 +17,6 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
+        export PYTHONPATH=$PYTHONPATH:.
         pytest tests/unit
         pytest tests/e2e
