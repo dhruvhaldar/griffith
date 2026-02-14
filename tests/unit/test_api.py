@@ -36,3 +36,14 @@ def test_calculate_fatigue():
     data = response.json()
     assert "cycles" in data
     assert data["cycles"] > 0
+
+def test_calculate_r_curve():
+    response = client.post("/calculate-r-curve", json={
+        "initial_crack": 0.05,
+        "youngs_modulus": 200e9,
+        "geometry_factor": 1.0
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert "critical_stress" in data
+    assert data["critical_stress"] > 0
