@@ -40,28 +40,18 @@ class RCurveAnalysis:
         # Numerical solution to find delta_a where (a0 + da) * dR/da = R(da)
         delta_a_vals = np.linspace(1e-5, 0.1, 1000) # Sweep 0 to 100mm growth
 
-        lhs = []
-        rhs = []
+        # Vectorized R calculation
+        # Calculate R for all points
+        rhs = self.resistance_func(delta_a_vals)
 
-        for da in delta_a_vals:
-            # Calculate R
-            r_val = self.resistance_func(da)
+        # Calculate dR/da numerically using vectorization
+        epsilon = 1e-6
+        r_plus = self.resistance_func(delta_a_vals + epsilon)
+        r_minus = self.resistance_func(delta_a_vals - epsilon)
+        dr_da = (r_plus - r_minus) / (2 * epsilon)
 
-            # Calculate dR/da numerically
-            epsilon = 1e-6
-            r_plus = self.resistance_func(da + epsilon)
-            r_minus = self.resistance_func(da - epsilon)
-            dr_da = (r_plus - r_minus) / (2 * epsilon)
-
-            # Equation: (a0 + da) * dR/da = R
-            term = (initial_crack + da) * dr_da
-
-            lhs.append(term)
-            rhs.append(r_val)
-
-        # Find intersection
-        lhs = np.array(lhs)
-        rhs = np.array(rhs)
+        # Equation: (a0 + da) * dR/da = R
+        lhs = (initial_crack + delta_a_vals) * dr_da
 
         # We look for where LHS - RHS crosses zero
         diff = lhs - rhs
