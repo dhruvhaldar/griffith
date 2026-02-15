@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.integrate import quad
 
 class ParisLawIntegrator:
     """
@@ -24,6 +23,14 @@ class ParisLawIntegrator:
 
         Delta K = Y * Delta Sigma * sqrt(pi * a)
 
+        Uses an analytical solution for constant geometry_factor Y.
+        If m != 2:
+            N = (a_f^(1 - m/2) - a_i^(1 - m/2)) / ((1 - m/2) * A)
+        If m == 2:
+            N = (ln(a_f) - ln(a_i)) / A
+
+        where A = C * (Y * Delta Sigma * sqrt(pi))^m
+
         Args:
             stress_range (float): Delta Sigma (Pa).
             a_initial (float): Initial crack length (m).
@@ -33,13 +40,16 @@ class ParisLawIntegrator:
         Returns:
             float: Number of cycles N.
         """
-        def integrand(a):
-            delta_k = geometry_factor * stress_range * np.sqrt(np.pi * a)
-            da_dn = self.c * (delta_k ** self.m)
-            return 1.0 / da_dn
+        # A = C * (Y * Delta Sigma * sqrt(pi))^m
+        A = self.c * (geometry_factor * stress_range * np.sqrt(np.pi)) ** self.m
 
-        result, error = quad(integrand, a_initial, a_final)
-        return result
+        if abs(self.m - 2.0) < 1e-9:
+            integral = np.log(a_final) - np.log(a_initial)
+        else:
+            exponent = 1.0 - 0.5 * self.m
+            integral = (a_final ** exponent - a_initial ** exponent) / exponent
+
+        return integral / A
 
     def calculate_crack_growth_rate(self, delta_k):
         """
