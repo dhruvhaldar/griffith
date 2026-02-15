@@ -31,7 +31,7 @@
                 <label for="stress">Remote Stress (Pa):</label>
                 <input type="number" id="stress" value="200000000" step="1000000">
 
-                <button onclick="calculateSIF()">Calculate K_I</button>
+                <button onclick="calculateSIF(this)">Calculate K_I</button>
             </div>
             <div id="sif-result" class="result"></div>
             <canvas id="crack-viewer" width="400" height="300"></canvas>
@@ -55,7 +55,7 @@
                 <label for="a-final">Final Crack (m):</label>
                 <input type="number" id="a-final" value="0.020" step="0.001">
 
-                <button onclick="calculateFatigue()">Predict Cycles</button>
+                <button onclick="calculateFatigue(this)">Predict Cycles</button>
             </div>
             <div id="fatigue-result" class="result"></div>
             <div id="fatigue-plot"></div>
@@ -71,7 +71,7 @@
                  <label for="r-modulus">Young's Modulus (Pa):</label>
                  <input type="number" id="r-modulus" value="200000000000" step="1e9">
 
-                 <button onclick="calculateRCurve()">Analyze Stability</button>
+                 <button onclick="calculateRCurve(this)">Analyze Stability</button>
             </div>
             <div id="r-curve-result" class="result"></div>
         </section>
@@ -80,7 +80,12 @@
     <script src="crack_viewer.js"></script>
     <script src="growth_plot.js"></script>
     <script>
-        async function calculateSIF() {
+        async function calculateSIF(btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "Calculating...";
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+
             const geometry = document.getElementById('geometry').value;
             const width = parseFloat(document.getElementById('width').value);
             const crackLength = parseFloat(document.getElementById('crack-length').value);
@@ -102,10 +107,19 @@
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('sif-result').innerText = "Error connecting to API.";
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
             }
         }
 
-        async function calculateFatigue() {
+        async function calculateFatigue(btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "Predicting...";
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+
             const c = parseFloat(document.getElementById('c-paris').value);
             const m = parseFloat(document.getElementById('m-paris').value);
             const stressRange = parseFloat(document.getElementById('stress-range').value);
@@ -134,10 +148,19 @@
             } catch (error) {
                 console.error('Error:', error);
                 document.getElementById('fatigue-result').innerText = "Error connecting to API.";
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
             }
         }
 
-        async function calculateRCurve() {
+        async function calculateRCurve(btn) {
+            const originalText = btn.innerText;
+            btn.innerText = "Analyzing...";
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+
             const initialCrack = parseFloat(document.getElementById('r-initial-crack').value);
             const youngsModulus = parseFloat(document.getElementById('r-modulus').value);
 
@@ -164,6 +187,10 @@
             } catch (error) {
                  console.error('Error:', error);
                  document.getElementById('r-curve-result').innerText = "Error connecting to API.";
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                btn.removeAttribute('aria-busy');
             }
         }
     </script>
