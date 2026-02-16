@@ -113,7 +113,14 @@ def calculate_r_curve(request: RCurveRequest):
     def material_resistance(delta_a):
         return (150 + 400 * (delta_a ** 0.5)) * 1000
 
-    analysis = RCurveAnalysis(resistance_func=material_resistance)
+    # Analytical derivative for performance: dR/da = 200 / sqrt(da) (kJ/m^3)
+    def material_resistance_derivative(delta_a):
+        return (200 / (delta_a ** 0.5)) * 1000
+
+    analysis = RCurveAnalysis(
+        resistance_func=material_resistance,
+        resistance_deriv_func=material_resistance_derivative
+    )
 
     critical_stress = analysis.find_instability_load(
         initial_crack=request.initial_crack,

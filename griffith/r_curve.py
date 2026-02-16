@@ -5,12 +5,15 @@ class RCurveAnalysis:
     """
     R-Curve Analysis for stability prediction.
     """
-    def __init__(self, resistance_func):
+    def __init__(self, resistance_func, resistance_deriv_func=None):
         """
         Args:
             resistance_func (callable): Function R(delta_a) -> resistance (J/m^2 or K units).
+            resistance_deriv_func (callable, optional): Function dR/d(delta_a) -> (J/m^3).
+                                                      If provided, speeds up calculation.
         """
         self.resistance_func = resistance_func
+        self.resistance_deriv_func = resistance_deriv_func
         self.critical_values = {}
 
     def find_instability_load(self, initial_crack, youngs_modulus=200e9, geometry_factor=1.0):
@@ -44,11 +47,15 @@ class RCurveAnalysis:
         # Calculate R for all points
         rhs = self.resistance_func(delta_a_vals)
 
-        # Calculate dR/da numerically using vectorization
-        epsilon = 1e-6
-        r_plus = self.resistance_func(delta_a_vals + epsilon)
-        r_minus = self.resistance_func(delta_a_vals - epsilon)
-        dr_da = (r_plus - r_minus) / (2 * epsilon)
+        if self.resistance_deriv_func:
+            # Use analytical derivative for better performance
+            dr_da = self.resistance_deriv_func(delta_a_vals)
+        else:
+            # Calculate dR/da numerically using vectorization
+            epsilon = 1e-6
+            r_plus = self.resistance_func(delta_a_vals + epsilon)
+            r_minus = self.resistance_func(delta_a_vals - epsilon)
+            dr_da = (r_plus - r_minus) / (2 * epsilon)
 
         # Equation: (a0 + da) * dR/da = R
         lhs = (initial_crack + delta_a_vals) * dr_da
