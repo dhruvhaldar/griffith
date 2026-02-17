@@ -1,6 +1,55 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+def _instability_target_func(delta_a, initial_crack, resistance_func, resistance_deriv_func):
+    """
+    Target function for root finding: (a0 + da) * dR/da - R(da) = 0
+    """
+    # Calculate R
+    r_val = resistance_func(delta_a)
+
+    # Calculate dR/da
+    if resistance_deriv_func:
+        dr_da_val = resistance_deriv_func(delta_a)
+    else:
+        # Calculate dR/da numerically
+        epsilon = 1e-6
+        r_plus = resistance_func(delta_a + epsilon)
+        r_minus = resistance_func(delta_a - epsilon)
+        dr_da_val = (r_plus - r_minus) / (2 * epsilon)
+
+    lhs = (initial_crack + delta_a) * dr_da_val
+    return lhs - r_val
+
+def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
+    """
+    Simple bisection root finding.
+    O(log(1/tol)) complexity vs O(N) for grid search.
+    """
+    fa = f(a, *args)
+    fb = f(b, *args)
+
+    if fa * fb > 0:
+        return None # No sign change in bracket
+
+    for _ in range(max_iter):
+        mid = (a + b) / 2
+        if (b - a) / 2 < tol:
+            return mid
+
+        fmid = f(mid, *args)
+        if fmid == 0:
+            return mid
+
+        if fa * fmid < 0:
+            b = mid
+            fb = fmid
+        else:
+            a = mid
+            fa = fmid
+
+    return (a + b) / 2
+
 class RCurveAnalysis:
     """
     R-Curve Analysis for stability prediction.
@@ -41,38 +90,24 @@ class RCurveAnalysis:
         """
 
         # Numerical solution to find delta_a where (a0 + da) * dR/da = R(da)
-        delta_a_vals = np.linspace(1e-5, 0.1, 1000) # Sweep 0 to 100mm growth
+        # Use bisection root finding which is much faster (O(log N)) and more precise
+        # (to 1e-9 m) than a grid search (O(N) with limited precision).
 
-        # Vectorized R calculation
-        # Calculate R for all points
-        rhs = self.resistance_func(delta_a_vals)
+        # Search range matching original bounds (1e-5 to 0.1)
+        # Lower bound > epsilon (1e-6) for numerical derivative stability.
+        delta_a_crit = _find_root(
+            _instability_target_func,
+            1e-5,
+            0.1,
+            tol=1e-9,
+            args=(initial_crack, self.resistance_func, self.resistance_deriv_func)
+        )
 
-        if self.resistance_deriv_func:
-            # Use analytical derivative for better performance
-            dr_da = self.resistance_deriv_func(delta_a_vals)
-        else:
-            # Calculate dR/da numerically using vectorization
-            epsilon = 1e-6
-            r_plus = self.resistance_func(delta_a_vals + epsilon)
-            r_minus = self.resistance_func(delta_a_vals - epsilon)
-            dr_da = (r_plus - r_minus) / (2 * epsilon)
-
-        # Equation: (a0 + da) * dR/da = R
-        lhs = (initial_crack + delta_a_vals) * dr_da
-
-        # We look for where LHS - RHS crosses zero
-        diff = lhs - rhs
-
-        # Find index where sign changes
-        idx = np.where(np.diff(np.sign(diff)))[0]
-
-        if len(idx) == 0:
-            # Fallback if no intersection found (monotonic rising R-curve without tangency in range)
+        if delta_a_crit is None:
+            # No instability found in range
             return None
 
-        crit_idx = idx[0]
-        delta_a_crit = delta_a_vals[crit_idx]
-        r_crit = rhs[crit_idx]
+        r_crit = self.resistance_func(delta_a_crit)
 
         a_crit = initial_crack + delta_a_crit
 
