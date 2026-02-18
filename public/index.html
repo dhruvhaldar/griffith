@@ -95,6 +95,18 @@
     <script src="crack_viewer.js"></script>
     <script src="growth_plot.js"></script>
     <script>
+        function showError(element, message) {
+            element.classList.add('error');
+            element.innerHTML = ''; // Clear previous content
+
+            const icon = document.createElement('span');
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = '⚠️ ';
+
+            element.appendChild(icon);
+            element.appendChild(document.createTextNode(message));
+        }
+
         async function calculateSIF(btn) {
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Calculating...';
@@ -106,6 +118,8 @@
             const width = parseFloat(document.getElementById('width').value);
             const crackLength = parseFloat(document.getElementById('crack-length').value);
             const stress = parseFloat(document.getElementById('stress').value);
+            const resultDiv = document.getElementById('sif-result');
+            resultDiv.classList.remove('error');
 
             try {
                 const response = await fetch('/api/calculate-sif', {
@@ -115,14 +129,14 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    document.getElementById('sif-result').innerText = `K_I = ${(data.k1/1e6).toFixed(2)} MPa√m`;
+                    resultDiv.innerText = `K_I = ${(data.k1/1e6).toFixed(2)} MPa√m`;
                     drawCrack(width, crackLength);
                 } else {
-                    document.getElementById('sif-result').innerText = `Error: ${data.detail}`;
+                    showError(resultDiv, `Error: ${data.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('sif-result').innerText = "Error connecting to API.";
+                showError(resultDiv, "Error connecting to API.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');
@@ -144,6 +158,8 @@
             const aInitial = parseFloat(document.getElementById('a-initial').value);
             const aFinal = parseFloat(document.getElementById('a-final').value);
             const geometryFactor = 1.12;
+            const resultDiv = document.getElementById('fatigue-result');
+            resultDiv.classList.remove('error');
 
             try {
                 const response = await fetch('/api/calculate-fatigue', {
@@ -158,14 +174,14 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    document.getElementById('fatigue-result').innerText = `Remaining Cycles: ${Math.round(data.cycles).toLocaleString()}`;
+                    resultDiv.innerText = `Remaining Cycles: ${Math.round(data.cycles).toLocaleString()}`;
                     plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor);
                 } else {
-                    document.getElementById('fatigue-result').innerText = `Error: ${data.detail}`;
+                    showError(resultDiv, `Error: ${data.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('fatigue-result').innerText = "Error connecting to API.";
+                showError(resultDiv, "Error connecting to API.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');
@@ -183,6 +199,8 @@
 
             const initialCrack = parseFloat(document.getElementById('r-initial-crack').value);
             const youngsModulus = parseFloat(document.getElementById('r-modulus').value);
+            const resultDiv = document.getElementById('r-curve-result');
+            resultDiv.classList.remove('error');
 
             try {
                 const response = await fetch('/api/calculate-r-curve', {
@@ -196,17 +214,17 @@
                 const data = await response.json();
                 if (response.ok) {
                     if (data.critical_stress) {
-                        document.getElementById('r-curve-result').innerText =
+                        resultDiv.innerText =
                             `Critical Stress: ${(data.critical_stress/1e6).toFixed(2)} MPa, Extension: ${(data.critical_extension*1000).toFixed(2)} mm`;
                     } else {
-                        document.getElementById('r-curve-result').innerText = data.message;
+                        resultDiv.innerText = data.message;
                     }
                 } else {
-                    document.getElementById('r-curve-result').innerText = "Error calculating R-Curve.";
+                    showError(resultDiv, "Error calculating R-Curve.");
                 }
             } catch (error) {
                  console.error('Error:', error);
-                 document.getElementById('r-curve-result').innerText = "Error connecting to API.";
+                 showError(resultDiv, "Error connecting to API.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');

@@ -83,6 +83,14 @@ button:hover {
     text-align: center;
 }
 
+.result.error {
+    color: #c0392b;
+    background-color: #fce4ec;
+    border: 1px solid #e74c3c;
+    border-radius: 4px;
+    padding: 1rem;
+}
+
 canvas {
     display: block;
     margin: 0 auto;
