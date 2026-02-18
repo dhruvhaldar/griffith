@@ -23,8 +23,9 @@ def _instability_target_func(delta_a, initial_crack, resistance_func, resistance
 
 def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
     """
-    Simple bisection root finding.
-    O(log(1/tol)) complexity vs O(N) for grid search.
+    Illinois Algorithm for root finding.
+    A variant of Regula Falsi that provides superlinear convergence
+    while maintaining the robustness of bracketing methods.
     """
     fa = f(a, *args)
     fb = f(b, *args)
@@ -32,21 +33,44 @@ def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
     if fa * fb > 0:
         return None # No sign change in bracket
 
+    side = 0 # 0: uninitialized, -1: left (a) updated, 1: right (b) updated
+
     for _ in range(max_iter):
-        mid = (a + b) / 2
-        if (b - a) / 2 < tol:
-            return mid
+        if (b - a) < tol:
+            return (a + b) / 2
 
-        fmid = f(mid, *args)
-        if fmid == 0:
-            return mid
+        if fb == fa:
+            return (a + b) / 2
 
-        if fa * fmid < 0:
-            b = mid
-            fb = fmid
+        # Regula Falsi step
+        # c = (a * fb - b * fa) / (fb - fa)
+        # Using alternative formula to avoid overflow/underflow issues slightly
+        c = (a * fb - b * fa) / (fb - fa)
+
+        # Safety: ensure c is strictly within bounds
+        # Floating point errors might push c outside or equal to a/b
+        if c <= a or c >= b:
+            c = (a + b) / 2
+
+        fc = f(c, *args)
+
+        if abs(fc) < 1e-12: # Function value convergence
+            return c
+
+        if fa * fc > 0:
+            # Root in [c, b]. a moves to c.
+            a = c
+            fa = fc
+            if side == -1:
+                fb *= 0.5
+            side = -1
         else:
-            a = mid
-            fa = fmid
+            # Root in [a, c]. b moves to c.
+            b = c
+            fb = fc
+            if side == 1:
+                fa *= 0.5
+            side = 1
 
     return (a + b) / 2
 
