@@ -165,7 +165,7 @@ class RCurveAnalysis:
         delta_a = np.linspace(0, cv['delta_a'] * 2, 100)
 
         # R-Curve
-        r_curve = [self.resistance_func(da) for da in delta_a]
+        r_curve = self.resistance_func(delta_a)
 
         # Driving Force Curve at Critical Stress
         # J_app = (Y * sigma_c)^2 * pi * (a0 + da) / E
@@ -174,7 +174,7 @@ class RCurveAnalysis:
         E = cv['youngs_modulus']
         Y = cv['geometry_factor']
 
-        j_applied = [(Y * sigma_c)**2 * np.pi * (a0 + da) / E for da in delta_a]
+        j_applied = (Y * sigma_c)**2 * np.pi * (a0 + delta_a) / E
 
         plt.figure(figsize=(8, 6))
         plt.plot(delta_a * 1000, r_curve, label='Material Resistance (R-Curve)', linewidth=2)
