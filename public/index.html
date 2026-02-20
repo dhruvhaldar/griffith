@@ -95,7 +95,20 @@
     <script src="crack_viewer.js"></script>
     <script src="growth_plot.js"></script>
     <script>
+        function validateInputs(containerId) {
+            const container = document.getElementById(containerId);
+            const inputs = container.querySelectorAll('input, select');
+            for (const input of inputs) {
+                if (!input.checkValidity()) {
+                    input.reportValidity();
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function showError(element, message) {
+            element.setAttribute('role', 'alert');
             element.classList.add('error');
             element.innerHTML = ''; // Clear previous content
 
@@ -108,6 +121,8 @@
         }
 
         async function calculateSIF(btn) {
+            if (!validateInputs('sif-calculator')) return;
+
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Calculating...';
             btn.classList.add('loading');
@@ -120,6 +135,7 @@
             const stress = parseFloat(document.getElementById('stress').value);
             const resultDiv = document.getElementById('sif-result');
             resultDiv.classList.remove('error');
+            resultDiv.removeAttribute('role');
 
             try {
                 const response = await fetch('/api/calculate-sif', {
@@ -146,6 +162,8 @@
         }
 
         async function calculateFatigue(btn) {
+            if (!validateInputs('fatigue-calculator')) return;
+
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Predicting...';
             btn.classList.add('loading');
@@ -160,6 +178,7 @@
             const geometryFactor = 1.12;
             const resultDiv = document.getElementById('fatigue-result');
             resultDiv.classList.remove('error');
+            resultDiv.removeAttribute('role');
 
             try {
                 const response = await fetch('/api/calculate-fatigue', {
@@ -191,6 +210,8 @@
         }
 
         async function calculateRCurve(btn) {
+            if (!validateInputs('r-curve-calculator')) return;
+
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Analyzing...';
             btn.classList.add('loading');
@@ -201,6 +222,7 @@
             const youngsModulus = parseFloat(document.getElementById('r-modulus').value);
             const resultDiv = document.getElementById('r-curve-result');
             resultDiv.classList.remove('error');
+            resultDiv.removeAttribute('role');
 
             try {
                 const response = await fetch('/api/calculate-r-curve', {
