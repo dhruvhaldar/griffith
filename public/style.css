@@ -58,7 +58,7 @@ input, select {
 button {
     grid-column: 1 / -1;
     padding: 0.7rem;
-    background-color: #3498db;
+    background-color: #1976D2;
     color: white;
     border: none;
     border-radius: 4px;
@@ -72,7 +72,7 @@ button {
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: #1565C0;
 }
 
 .result {
@@ -166,4 +166,29 @@ input:invalid {
 
 input:invalid:focus {
     outline-color: #e74c3c;
+}
+
+/* Responsive & Accessibility Enhancements */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: #2c3e50;
+    color: white;
+    padding: 8px;
+    z-index: 100;
+    transition: top 0.3s;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+@media (max-width: 600px) {
+    .input-group {
+        grid-template-columns: 1fr;
+        align-items: stretch;
+    }
 }

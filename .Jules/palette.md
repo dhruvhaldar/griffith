@@ -9,3 +9,7 @@
 ## 2026-02-25 - Native Validation & Accessibility
 **Learning:** While `required` and `min` attributes existed, they weren't enforced by JS logic, leading to "rage clicks" and server errors. Enabling `reportValidity()` provides immediate, accessible feedback. Also, `role="alert"` ensures screen readers announce errors immediately, while `aria-live="polite"` handles results.
 **Action:** Use `checkValidity()` and `reportValidity()` in frontend logic to enforce HTML constraints before API calls. Use `role="alert"` for transient errors.
+
+## 2026-02-26 - Responsive Form Layouts
+**Learning:** The `grid-template-columns: 1fr 1fr` layout pattern used for form inputs breaks on mobile viewports (< 600px), causing label truncation and poor usability.
+**Action:** Always include a `@media` query to stack `.input-group` elements vertically for mobile support in `style.css`.
