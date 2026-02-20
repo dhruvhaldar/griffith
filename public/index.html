@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Griffith Fracture Mechanics</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
     <header>
@@ -95,6 +94,24 @@
     <script src="crack_viewer.js"></script>
     <script src="growth_plot.js"></script>
     <script>
+        let plotlyPromise = null;
+        function loadPlotly() {
+            if (window.Plotly) return Promise.resolve();
+            if (plotlyPromise) return plotlyPromise;
+
+            plotlyPromise = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.plot.ly/plotly-latest.min.js';
+                script.onload = () => resolve();
+                script.onerror = () => {
+                    plotlyPromise = null;
+                    reject(new Error('Failed to load Plotly'));
+                };
+                document.body.appendChild(script);
+            });
+            return plotlyPromise;
+        }
+
         function validateInputs(containerId) {
             const container = document.getElementById(containerId);
             const inputs = container.querySelectorAll('input, select');
@@ -170,6 +187,9 @@
             btn.disabled = true;
             btn.setAttribute('aria-busy', 'true');
 
+            // Start loading Plotly immediately
+            const plotlyLoad = loadPlotly();
+
             const c = parseFloat(document.getElementById('c-paris').value);
             const m = parseFloat(document.getElementById('m-paris').value);
             const stressRange = parseFloat(document.getElementById('stress-range').value);
@@ -194,7 +214,13 @@
                 const data = await response.json();
                 if (response.ok) {
                     resultDiv.innerText = `Remaining Cycles: ${Math.round(data.cycles).toLocaleString()}`;
-                    plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor);
+                    try {
+                        await plotlyLoad;
+                        plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor);
+                    } catch (e) {
+                        console.error('Plotly failed to load', e);
+                        showError(resultDiv, "Error loading chart library.");
+                    }
                 } else {
                     showError(resultDiv, `Error: ${data.detail}`);
                 }
