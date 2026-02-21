@@ -16,7 +16,7 @@
     <main id="main">
         <section id="sif-calculator">
             <h2>Stress Intensity Factor Calculator</h2>
-            <div class="input-group">
+            <form class="input-group" onsubmit="event.preventDefault(); calculateSIF(this.querySelector('button[type=submit]'))">
                 <label for="geometry">Geometry:</label>
                 <select id="geometry">
                     <option value="CCT">Center Cracked Plate (CCT)</option>
@@ -31,8 +31,8 @@
                 <label for="stress">Remote Stress (Pa):</label>
                 <input type="number" id="stress" value="200000000" step="1000000" required>
 
-                <button onclick="calculateSIF(this)">Calculate K_I</button>
-            </div>
+                <button type="submit">Calculate K_I</button>
+            </form>
             <div id="sif-result" class="result" aria-live="polite">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
@@ -44,7 +44,7 @@
 
         <section id="fatigue-calculator">
             <h2>Fatigue Life Prediction (Paris Law)</h2>
-            <div class="input-group">
+            <form class="input-group" onsubmit="event.preventDefault(); calculateFatigue(this.querySelector('button[type=submit]'))">
                 <label for="c-paris">C (MPa units):</label>
                 <input type="number" id="c-paris" value="1.5e-11" step="1e-12" min="0" required title="Must be a positive number">
 
@@ -60,8 +60,8 @@
                 <label for="a-final">Final Crack (m):</label>
                 <input type="number" id="a-final" value="0.020" step="0.001" min="0" required title="Must be a positive number">
 
-                <button onclick="calculateFatigue(this)">Predict Cycles</button>
-            </div>
+                <button type="submit">Predict Cycles</button>
+            </form>
             <div id="fatigue-result" class="result" aria-live="polite">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
@@ -74,15 +74,15 @@
         <section id="r-curve-calculator">
             <h2>R-Curve Analysis (Stability)</h2>
             <p>Material Resistance: R = 150 + 400 * sqrt(da) (kJ/m²)</p>
-            <div class="input-group">
+            <form class="input-group" onsubmit="event.preventDefault(); calculateRCurve(this.querySelector('button[type=submit]'))">
                  <label for="r-initial-crack">Initial Crack (m):</label>
                  <input type="number" id="r-initial-crack" value="0.05" step="0.01" min="0" required title="Must be a positive number">
 
                  <label for="r-modulus">Young's Modulus (Pa):</label>
                  <input type="number" id="r-modulus" value="200000000000" step="1e9" min="0" required title="Must be a positive number">
 
-                 <button onclick="calculateRCurve(this)">Analyze Stability</button>
-            </div>
+                 <button type="submit">Analyze Stability</button>
+            </form>
             <div id="r-curve-result" class="result" aria-live="polite">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
