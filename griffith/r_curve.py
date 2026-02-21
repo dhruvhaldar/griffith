@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 
 def _instability_target_func(delta_a, initial_crack, resistance_func, resistance_deriv_func):
     """
@@ -175,6 +174,8 @@ class RCurveAnalysis:
         Y = cv['geometry_factor']
 
         j_applied = (Y * sigma_c)**2 * np.pi * (a0 + delta_a) / E
+
+        import matplotlib.pyplot as plt
 
         plt.figure(figsize=(8, 6))
         plt.plot(delta_a * 1000, r_curve, label='Material Resistance (R-Curve)', linewidth=2)
