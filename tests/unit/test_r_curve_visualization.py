@@ -1,10 +1,11 @@
 
 import pytest
 import numpy as np
+import matplotlib.pyplot # Ensure it is loaded for patching
 from unittest.mock import MagicMock, patch
 from griffith.r_curve import RCurveAnalysis
 
-@patch('griffith.r_curve.plt')
+@patch('matplotlib.pyplot')
 def test_plot_stability_diagram_vectorization(mock_plt):
     # Verify that plot_stability_diagram uses vectorized calls
 
