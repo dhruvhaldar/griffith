@@ -13,3 +13,7 @@
 ## 2026-02-26 - Responsive Form Layouts
 **Learning:** The `grid-template-columns: 1fr 1fr` layout pattern used for form inputs breaks on mobile viewports (< 600px), causing label truncation and poor usability.
 **Action:** Always include a `@media` query to stack `.input-group` elements vertically for mobile support in `style.css`.
+
+## 2026-03-04 - Result Copy Button Pattern
+**Learning:** Users often need to copy calculation results. Implementing a reusable `showResult(element, text)` helper that appends a copy button (📋) next to the result text significantly improves usability without cluttering the UI. Using `navigator.clipboard.writeText` with visual feedback (✅) provides immediate confirmation.
+**Action:** Use the `showResult` pattern for any new calculation outputs to maintain consistency and provide copy functionality by default. Ensure container has `min-height` to prevent layout shift during updates.
