@@ -192,3 +192,43 @@ input:invalid:focus {
         align-items: stretch;
     }
 }
+
+/* Palette: Copy Result Button */
+.result-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.2rem;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    display: inline-flex; /* override display: flex from button */
+    align-items: center;
+    justify-content: center;
+    color: #333; /* Reset color */
+    width: auto; /* Reset width */
+}
+
+.copy-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.copy-btn:focus-visible {
+    outline: 2px solid #2c3e50;
+    outline-offset: 2px;
+}
+
+/* Ensure result area doesn't collapse */
+.result {
+    min-height: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
