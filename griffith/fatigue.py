@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 class ParisLawIntegrator:
     """
@@ -40,7 +41,19 @@ class ParisLawIntegrator:
         Returns:
             float: Number of cycles N.
         """
-        # A = C * (Y * Delta Sigma * sqrt(pi))^m
+        # Check if inputs are scalars to use math module for performance
+        if isinstance(stress_range, (int, float)) and isinstance(a_initial, (int, float)) and isinstance(a_final, (int, float)):
+            A = self.c * (geometry_factor * stress_range * math.sqrt(math.pi)) ** self.m
+
+            if abs(self.m - 2.0) < 1e-9:
+                integral = math.log(a_final) - math.log(a_initial)
+            else:
+                exponent = 1.0 - 0.5 * self.m
+                integral = (a_final ** exponent - a_initial ** exponent) / exponent
+
+            return integral / A
+
+        # Fallback to numpy for arrays
         A = self.c * (geometry_factor * stress_range * np.sqrt(np.pi)) ** self.m
 
         if abs(self.m - 2.0) < 1e-9:

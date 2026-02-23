@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 def _instability_target_func(delta_a, initial_crack, resistance_func, resistance_deriv_func):
     """
@@ -138,7 +139,10 @@ class RCurveAnalysis:
         # J = Y^2 * sigma^2 * pi * a / E
         # sigma^2 = J * E / (Y^2 * pi * a)
 
-        sigma_c = np.sqrt(r_crit * youngs_modulus / (geometry_factor**2 * np.pi * a_crit))
+        if isinstance(r_crit, (int, float)) and isinstance(a_crit, (int, float)):
+             sigma_c = math.sqrt(r_crit * youngs_modulus / (geometry_factor**2 * math.pi * a_crit))
+        else:
+             sigma_c = np.sqrt(r_crit * youngs_modulus / (geometry_factor**2 * np.pi * a_crit))
 
         self.critical_values = {
             'delta_a': delta_a_crit,

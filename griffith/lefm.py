@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 class StressIntensityFactor:
     """
@@ -20,6 +21,8 @@ class StressIntensityFactor:
         Returns:
             float: K_I (Pa*sqrt(m)).
         """
+        if isinstance(crack_length, (int, float)):
+            return self.geometry_factor * stress * math.sqrt(math.pi * crack_length)
         return self.geometry_factor * stress * np.sqrt(np.pi * crack_length)
 
     @staticmethod
@@ -37,4 +40,6 @@ class StressIntensityFactor:
         Returns:
             float: Critical crack length a_c (m).
         """
+        if isinstance(k_ic, (int, float)) and isinstance(stress, (int, float)):
+             return (1.0 / math.pi) * (k_ic / (geometry_factor * stress)) ** 2
         return (1.0 / np.pi) * (k_ic / (geometry_factor * stress)) ** 2

@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from griffith.lefm import StressIntensityFactor
 
 class CenterCrackedPlate(StressIntensityFactor):
@@ -13,6 +14,7 @@ class CenterCrackedPlate(StressIntensityFactor):
         """
         self.width = width
         self.crack_length = crack_length # 2a
+        self._last_calc_crack_length = crack_length
         # Initial Y calculation based on current crack length
         super().__init__(self._calculate_geometry_factor(crack_length))
 
@@ -26,6 +28,8 @@ class CenterCrackedPlate(StressIntensityFactor):
         alpha = crack_length_2a / self.width
         # Tada, Paris, Irwin formula for finite width correction
         # Y = sqrt(sec(pi * alpha / 2))
+        if isinstance(crack_length_2a, (int, float)):
+            return math.sqrt(1 / math.cos(math.pi * alpha / 2))
         return np.sqrt(1 / np.cos(np.pi * alpha / 2))
 
     def calculate_k1(self, stress, crack_length=None):
@@ -39,8 +43,23 @@ class CenterCrackedPlate(StressIntensityFactor):
         if crack_length is None:
             crack_length = self.crack_length
 
-        # Update geometry factor for the specific crack length
-        self.geometry_factor = self._calculate_geometry_factor(crack_length)
+        # Update geometry factor for the specific crack length only if needed
+        # Optimize primarily for scalars (API usage)
+        should_calculate = True
+
+        if isinstance(crack_length, (int, float)):
+             # Only check cache for scalars
+             if (isinstance(self._last_calc_crack_length, (int, float)) and
+                 abs(crack_length - self._last_calc_crack_length) < 1e-12):
+                 should_calculate = False
+
+        if should_calculate:
+            self.geometry_factor = self._calculate_geometry_factor(crack_length)
+            if isinstance(crack_length, (int, float)):
+                self._last_calc_crack_length = crack_length
+            else:
+                # Invalidate cache for array inputs or other types
+                self._last_calc_crack_length = None
 
         # For CCT, the formula is usually K = Y * sigma * sqrt(pi * a)
         # where a is half crack length.
@@ -73,6 +92,12 @@ class SingleEdgeNotchBend(StressIntensityFactor):
         """
         alpha = a / self.width
         # Standard ASTM E399 formula
+
+        if isinstance(a, (int, float)):
+            numerator = 3 * math.sqrt(alpha) * (1.99 - alpha * (1 - alpha) * (2.15 - 3.93 * alpha + 2.7 * alpha**2))
+            denominator = 2 * (1 + 2 * alpha) * (1 - alpha)**1.5
+            return numerator / denominator
+
         numerator = 3 * np.sqrt(alpha) * (1.99 - alpha * (1 - alpha) * (2.15 - 3.93 * alpha + 2.7 * alpha**2))
         denominator = 2 * (1 + 2 * alpha) * (1 - alpha)**1.5
         return numerator / denominator
