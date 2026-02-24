@@ -334,5 +334,36 @@
             }
         }
     </script>
+    <script>
+        // Palette: Persist form data to localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input:not([type="hidden"]):not([type="password"]):not([type="file"]), select');
+            inputs.forEach(input => {
+                if (input.id) {
+                    const key = 'griffith_' + input.id;
+                    const saved = localStorage.getItem(key);
+
+                    if (saved !== null) {
+                        if (input.type === 'checkbox' || input.type === 'radio') {
+                            input.checked = (saved === 'true');
+                        } else {
+                            input.value = saved;
+                        }
+                    }
+
+                    const saveHandler = () => {
+                        if (input.type === 'checkbox' || input.type === 'radio') {
+                            localStorage.setItem(key, input.checked);
+                        } else {
+                            localStorage.setItem(key, input.value);
+                        }
+                    };
+
+                    input.addEventListener('input', saveHandler);
+                    input.addEventListener('change', saveHandler);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
