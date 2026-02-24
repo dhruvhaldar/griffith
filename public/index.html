@@ -160,10 +160,30 @@
             copyBtn.ariaLabel = 'Copy result';
             copyBtn.title = 'Copy result to clipboard';
             copyBtn.innerHTML = '📋';
+
+            // Palette: Add tooltip for accessible feedback
+            const tooltip = document.createElement('span');
+            tooltip.className = 'copy-tooltip';
+            tooltip.textContent = 'Copied!';
+            tooltip.setAttribute('aria-hidden', 'true'); // Hidden from SR as we update aria-label
+            copyBtn.appendChild(tooltip);
+
             copyBtn.onclick = () => {
                 navigator.clipboard.writeText(text).then(() => {
-                    copyBtn.innerHTML = '✅';
-                    setTimeout(() => copyBtn.innerHTML = '📋', 2000);
+                    // Visual feedback
+                    copyBtn.classList.add('copied');
+                    tooltip.classList.add('show');
+                    copyBtn.childNodes[0].textContent = '✅';
+
+                    // Accessible feedback
+                    copyBtn.ariaLabel = 'Copied!';
+
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        tooltip.classList.remove('show');
+                        copyBtn.childNodes[0].textContent = '📋';
+                        copyBtn.ariaLabel = 'Copy result';
+                    }, 2000);
                 }).catch(err => {
                     console.error('Failed to copy: ', err);
                 });

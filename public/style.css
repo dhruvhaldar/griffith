@@ -232,3 +232,51 @@ input:invalid:focus {
     flex-direction: column;
     justify-content: center;
 }
+
+/* Palette: Responsive Canvas Fix */
+canvas {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Palette: Copy Feedback Tooltip */
+.copy-btn {
+    position: relative;
+    overflow: visible;
+}
+
+.copy-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s, bottom 0.2s;
+    pointer-events: none;
+    margin-bottom: 8px;
+    visibility: hidden;
+    z-index: 10;
+}
+
+.copy-tooltip.show {
+    opacity: 1;
+    visibility: visible;
+    bottom: calc(100% + 5px);
+}
+
+.copy-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
