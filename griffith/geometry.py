@@ -1,6 +1,15 @@
 import numpy as np
 import math
+from functools import lru_cache
 from griffith.lefm import StressIntensityFactor
+
+@lru_cache(maxsize=128)
+def _calculate_cct_y_scalar(crack_length, width):
+    """
+    Cached calculation for scalar inputs.
+    """
+    alpha = crack_length / width
+    return math.sqrt(1 / math.cos(math.pi * alpha / 2))
 
 class CenterCrackedPlate(StressIntensityFactor):
     """
@@ -25,11 +34,12 @@ class CenterCrackedPlate(StressIntensityFactor):
         alpha = a / (W/2) = 2a / W
         Y = sqrt(sec(pi * a / W)) (Approximation)
         """
+        if isinstance(crack_length_2a, (int, float)):
+            return _calculate_cct_y_scalar(crack_length_2a, self.width)
+
         alpha = crack_length_2a / self.width
         # Tada, Paris, Irwin formula for finite width correction
         # Y = sqrt(sec(pi * alpha / 2))
-        if isinstance(crack_length_2a, (int, float)):
-            return math.sqrt(1 / math.cos(math.pi * alpha / 2))
         return np.sqrt(1 / np.cos(np.pi * alpha / 2))
 
     def calculate_k1(self, stress, crack_length=None):
