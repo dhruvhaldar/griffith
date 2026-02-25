@@ -21,3 +21,7 @@
 ## 2026-03-05 - Enhanced Copy Feedback & Mobile Responsiveness
 **Learning:** Simple icon changes (📋 -> ✅) for copy actions lack persistence and clear accessibility context. Adding a transient tooltip ("Copied!") provides unmistakable confirmation for visual users, while updating `aria-label` ensures screen reader users are informed. Additionally, unconstrained `canvas` elements cause horizontal overflow on mobile devices, breaking the layout.
 **Action:** Implement a `showCopyFeedback` pattern with a positioned tooltip and transient `aria-label` update for copy actions. Always ensure `canvas` elements have `max-width: 100%; height: auto;` to maintain responsiveness.
+
+## 2026-03-05 - Scientific Notation Usability
+**Learning:** Users struggle with entering large physical constants (like 200 GPa) into numeric inputs, often leading to order-of-magnitude errors. A live, client-side formatter that displays the human-readable metric equivalent (e.g., "200 GPa") below the input significantly reduces cognitive load and errors.
+**Action:** Implement a `LiveUnitFormatter` pattern for any scientific/engineering inputs that automatically parses and displays metric prefixes based on the label's unit.
