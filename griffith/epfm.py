@@ -20,9 +20,10 @@ def j_integral(k_i, youngs_modulus, poisson_ratio=0.3, plane_stress=True):
     if plane_stress:
         effective_modulus = youngs_modulus
     else:
-        effective_modulus = youngs_modulus / (1 - poisson_ratio ** 2)
+        # Optimization: Use multiplication instead of power for performance
+        effective_modulus = youngs_modulus / (1 - poisson_ratio * poisson_ratio)
 
-    return k_i ** 2 / effective_modulus
+    return (k_i * k_i) / effective_modulus
 
 def ctod(k_i, yield_strength, youngs_modulus, constraint_factor=1.0):
     """
@@ -39,4 +40,4 @@ def ctod(k_i, yield_strength, youngs_modulus, constraint_factor=1.0):
     Returns:
         float: CTOD delta (m).
     """
-    return k_i ** 2 / (constraint_factor * yield_strength * youngs_modulus)
+    return (k_i * k_i) / (constraint_factor * yield_strength * youngs_modulus)

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import numpy as np
+import math
 
 from griffith.geometry import CenterCrackedPlate
 from griffith.fatigue import ParisLawIntegrator
@@ -110,12 +111,13 @@ def calculate_j_integral(request: JIntegralRequest):
 @app.post("/calculate-r-curve")
 def calculate_r_curve(request: RCurveRequest):
     # Hardcoded material resistance for demo: R = 150 + 400 * sqrt(da)  (kJ/m^2)
+    # Optimization: Use math.sqrt(delta_a) instead of delta_a ** 0.5 for performance
     def material_resistance(delta_a):
-        return (150 + 400 * (delta_a ** 0.5)) * 1000
+        return (150 + 400 * math.sqrt(delta_a)) * 1000
 
     # Analytical derivative for performance: dR/da = 200 / sqrt(da) (kJ/m^3)
     def material_resistance_derivative(delta_a):
-        return (200 / (delta_a ** 0.5)) * 1000
+        return (200 / math.sqrt(delta_a)) * 1000
 
     analysis = RCurveAnalysis(
         resistance_func=material_resistance,
