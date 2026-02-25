@@ -290,3 +290,28 @@ canvas {
 .result-container {
     animation: fadeIn 0.4s ease-out;
 }
+
+/* Palette: Live Unit Formatter */
+.input-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-wrapper input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.unit-helper {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+    min-height: 1.2em; /* Prevent layout shift when empty */
+    transition: opacity 0.2s;
+}
+
+.unit-helper:empty {
+    opacity: 0;
+}

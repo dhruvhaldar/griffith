@@ -335,6 +335,84 @@
         }
     </script>
     <script>
+        // Palette: Live Unit Formatter
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('.input-group input[type="number"]');
+
+            const prefixes = [
+                { value: 1e12, symbol: 'T' },
+                { value: 1e9, symbol: 'G' },
+                { value: 1e6, symbol: 'M' },
+                { value: 1e3, symbol: 'k' },
+                { value: 1, symbol: '' },
+                { value: 1e-3, symbol: 'm' },
+                { value: 1e-6, symbol: 'µ' },
+                { value: 1e-9, symbol: 'n' }
+            ];
+
+            function formatMetric(value, baseUnit) {
+                if (value === 0) return `0 ${baseUnit}`;
+
+                const absValue = Math.abs(value);
+                let bestPrefix = prefixes.find(p => absValue >= p.value);
+                if (!bestPrefix) bestPrefix = prefixes[prefixes.length - 1];
+
+                if (bestPrefix) {
+                     const scaled = value / bestPrefix.value;
+                     // Avoid long decimals: 2.00 -> 2
+                     const formatted = parseFloat(scaled.toPrecision(4));
+                     return `${formatted} ${bestPrefix.symbol}${baseUnit}`;
+                }
+                return `${value} ${baseUnit}`;
+            }
+
+            inputs.forEach(input => {
+                const label = document.querySelector(`label[for="${input.id}"]`);
+                if (!label) return;
+
+                const match = label.textContent.match(/\((.*?)\)/);
+                if (!match) return;
+
+                let baseUnit = match[1];
+                if (baseUnit.includes(' ')) return; // Skip complex units
+
+                if (input.parentNode.classList.contains('input-wrapper')) return;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'input-wrapper';
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                const helper = document.createElement('div');
+                helper.className = 'unit-helper';
+                helper.id = `helper-${input.id}`;
+                helper.setAttribute('aria-hidden', 'true');
+                wrapper.appendChild(helper);
+
+                const existingDesc = input.getAttribute('aria-describedby');
+                if (existingDesc) {
+                    if (!existingDesc.includes(helper.id)) {
+                        input.setAttribute('aria-describedby', `${existingDesc} ${helper.id}`);
+                    }
+                } else {
+                    input.setAttribute('aria-describedby', helper.id);
+                }
+
+                const updateHelper = () => {
+                    const val = parseFloat(input.value);
+                    if (isNaN(val)) {
+                        helper.textContent = '';
+                        return;
+                    }
+                    helper.textContent = formatMetric(val, baseUnit);
+                };
+
+                input.addEventListener('input', updateHelper);
+                if (input.value) updateHelper();
+            });
+        });
+    </script>
+    <script>
         // Palette: Persist form data to localStorage
         document.addEventListener('DOMContentLoaded', () => {
             const inputs = document.querySelectorAll('input:not([type="hidden"]):not([type="password"]):not([type="file"]), select');
