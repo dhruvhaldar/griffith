@@ -443,5 +443,52 @@
             });
         });
     </script>
+    <script>
+        // Palette: Client-Side Logical Validation
+        document.addEventListener('DOMContentLoaded', () => {
+            const widthInput = document.getElementById('width');
+            const crackInput = document.getElementById('crack-length');
+            const aInitial = document.getElementById('a-initial');
+            const aFinal = document.getElementById('a-final');
+
+            const validateSIF = () => {
+                if (!widthInput || !crackInput) return;
+                const width = parseFloat(widthInput.value);
+                const crack = parseFloat(crackInput.value);
+
+                if (!isNaN(width) && !isNaN(crack) && crack >= width) {
+                    crackInput.setCustomValidity('Crack length must be smaller than the plate width.');
+                } else {
+                    crackInput.setCustomValidity('');
+                }
+            };
+
+            const validateFatigue = () => {
+                if (!aInitial || !aFinal) return;
+                const initial = parseFloat(aInitial.value);
+                const final = parseFloat(aFinal.value);
+
+                if (!isNaN(initial) && !isNaN(final) && initial >= final) {
+                    aInitial.setCustomValidity('Initial crack length must be smaller than final crack length.');
+                } else {
+                    aInitial.setCustomValidity('');
+                }
+            };
+
+            if (widthInput && crackInput) {
+                widthInput.addEventListener('input', validateSIF);
+                crackInput.addEventListener('input', validateSIF);
+                // Run once on load
+                validateSIF();
+            }
+
+            if (aInitial && aFinal) {
+                aInitial.addEventListener('input', validateFatigue);
+                aFinal.addEventListener('input', validateFatigue);
+                // Run once on load
+                validateFatigue();
+            }
+        });
+    </script>
 </body>
 </html>
