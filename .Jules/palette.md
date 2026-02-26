@@ -25,3 +25,7 @@
 ## 2026-03-05 - Scientific Notation Usability
 **Learning:** Users struggle with entering large physical constants (like 200 GPa) into numeric inputs, often leading to order-of-magnitude errors. A live, client-side formatter that displays the human-readable metric equivalent (e.g., "200 GPa") below the input significantly reduces cognitive load and errors.
 **Action:** Implement a `LiveUnitFormatter` pattern for any scientific/engineering inputs that automatically parses and displays metric prefixes based on the label's unit.
+
+## 2026-03-05 - Client-Side Logical Validation
+**Learning:** Native form validation handles data types and ranges, but misses logical constraints between fields (e.g., crack length > plate width). This leads to frustrating server errors.
+**Action:** Implement `setCustomValidity` with descriptive messages on `input` events to enforce logical constraints client-side, ensuring users see helpful errors before submission.
