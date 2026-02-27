@@ -291,6 +291,15 @@ canvas {
     animation: fadeIn 0.4s ease-out;
 }
 
+/* Palette: Visual Required Indicators */
+label:has(+ input[required])::after,
+label:has(+ select[required])::after,
+label:has(+ .input-wrapper > input[required])::after {
+    content: " *";
+    color: #e74c3c;
+    font-weight: bold;
+}
+
 /* Palette: Live Unit Formatter */
 .input-wrapper {
     display: flex;

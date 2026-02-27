@@ -29,3 +29,7 @@
 ## 2026-03-05 - Client-Side Logical Validation
 **Learning:** Native form validation handles data types and ranges, but misses logical constraints between fields (e.g., crack length > plate width). This leads to frustrating server errors.
 **Action:** Implement `setCustomValidity` with descriptive messages on `input` events to enforce logical constraints client-side, ensuring users see helpful errors before submission.
+
+## 2026-03-05 - Visual Required Indicators & Dynamic DOM
+**Learning:** Native HTML `required` attributes exist but lack visual indicators (like asterisks), causing friction before submission. Because client-side scripts (like `LiveUnitFormatter`) dynamically wrap inputs in `.input-wrapper` divs, traditional adjacent sibling selectors (`label + input`) break.
+**Action:** Use the CSS `:has()` pseudo-class (`label:has(+ input[required]), label:has(+ .input-wrapper > input[required])`) to create robust visual indicators that survive dynamic DOM manipulation.
