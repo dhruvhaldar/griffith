@@ -33,3 +33,7 @@
 ## 2026-03-05 - Visual Required Indicators & Dynamic DOM
 **Learning:** Native HTML `required` attributes exist but lack visual indicators (like asterisks), causing friction before submission. Because client-side scripts (like `LiveUnitFormatter`) dynamically wrap inputs in `.input-wrapper` divs, traditional adjacent sibling selectors (`label + input`) break.
 **Action:** Use the CSS `:has()` pseudo-class (`label:has(+ input[required]), label:has(+ .input-wrapper > input[required])`) to create robust visual indicators that survive dynamic DOM manipulation.
+
+## 2026-03-05 - Color Contrast Failures in Default Colors
+**Learning:** Default CSS colors for success states (like `#27ae60` green) and empty states (like `#7f8c8d` gray) often fail WCAG AA minimum contrast ratios (4.5:1) when placed on light backgrounds (e.g., `#ffffff` or `#f8f9fa`), making text unreadable for visually impaired users.
+**Action:** Always test foreground/background combinations using a contrast checker script or tool, and select darker shades (like `#1e8449` or `#546e7a`) to meet accessibility standards.
