@@ -101,15 +101,18 @@ class SingleEdgeNotchBend(StressIntensityFactor):
         Calculates f(a/W) for SENB.
         """
         alpha = a / self.width
+        one_minus_alpha = 1.0 - alpha
         # Standard ASTM E399 formula
 
         if isinstance(a, (int, float)):
-            numerator = 3 * math.sqrt(alpha) * (1.99 - alpha * (1 - alpha) * (2.15 - 3.93 * alpha + 2.7 * alpha**2))
-            denominator = 2 * (1 + 2 * alpha) * (1 - alpha)**1.5
+            # Optimization: Replace ** 1.5 with multiplication and sqrt, and ** 2 with multiplication
+            numerator = 3 * math.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 - 3.93 * alpha + 2.7 * alpha * alpha))
+            denominator = 2 * (1 + 2 * alpha) * one_minus_alpha * math.sqrt(one_minus_alpha)
             return numerator / denominator
 
-        numerator = 3 * np.sqrt(alpha) * (1.99 - alpha * (1 - alpha) * (2.15 - 3.93 * alpha + 2.7 * alpha**2))
-        denominator = 2 * (1 + 2 * alpha) * (1 - alpha)**1.5
+        # Optimization: Replace ** 1.5 with multiplication and sqrt, and ** 2 with multiplication
+        numerator = 3 * np.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 - 3.93 * alpha + 2.7 * alpha * alpha))
+        denominator = 2 * (1 + 2 * alpha) * one_minus_alpha * np.sqrt(one_minus_alpha)
         return numerator / denominator
 
     def calculate_k1_from_load(self, load, crack_length=None):
