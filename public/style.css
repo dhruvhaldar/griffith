@@ -78,7 +78,7 @@ button:hover {
 .result {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #27ae60;
+    color: #1e8449; /* Improved from #27ae60 for better contrast (4.72:1) */
     margin-bottom: 1rem;
     text-align: center;
 }
@@ -145,7 +145,7 @@ button:focus-visible, input:focus-visible, select:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    color: #7f8c8d;
+    color: #546e7a; /* Improved from #7f8c8d for better contrast (5.12:1) */
     background-color: #f8f9fa;
     border: 1px dashed #bdc3c7;
     border-radius: 4px;
