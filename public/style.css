@@ -103,6 +103,10 @@ canvas {
     height: 400px;
 }
 
+#fatigue-plot:empty {
+    display: none;
+}
+
 /* Accessibility & UX Enhancements */
 
 /* Loading Spinner */
