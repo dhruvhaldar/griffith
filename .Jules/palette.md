@@ -37,3 +37,7 @@
 ## 2026-03-05 - Color Contrast Failures in Default Colors
 **Learning:** Default CSS colors for success states (like `#27ae60` green) and empty states (like `#7f8c8d` gray) often fail WCAG AA minimum contrast ratios (4.5:1) when placed on light backgrounds (e.g., `#ffffff` or `#f8f9fa`), making text unreadable for visually impaired users.
 **Action:** Always test foreground/background combinations using a contrast checker script or tool, and select darker shades (like `#1e8449` or `#546e7a`) to meet accessibility standards.
+
+## 2026-03-05 - Missing Cursor Affordance on Labels
+**Learning:** Native `<label>` elements focus their associated inputs when clicked, but lack visual indicators for this interactivity. Users may not realize they can click the label text, especially on complex or lengthy forms. Adding a `cursor: pointer;` provides a clear visual cue for this affordance, improving usability and reducing perceived friction.
+**Action:** Always add `cursor: pointer;` to `<label>` elements in CSS to visually communicate their interactive nature to users.
