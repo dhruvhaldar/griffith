@@ -15,6 +15,11 @@ class ParisLawIntegrator:
         """
         self.c = c
         self.m = m
+        # ⚡ Bolt Optimization: Precompute invariant values used in predict_cycles to avoid redundant calculations
+        self._m_is_2 = abs(self.m - 2.0) < 1e-9
+        self._exponent = 1.0 - 0.5 * self.m
+        self._c_sqrt_pi_m = self.c * (math.sqrt(math.pi) ** self.m)
+        self._c_sqrt_np_pi_m = self.c * (np.sqrt(np.pi) ** self.m)
 
     def predict_cycles(self, stress_range, a_initial, a_final, geometry_factor=1.0):
         """
@@ -43,26 +48,24 @@ class ParisLawIntegrator:
         """
         # Check if inputs are scalars to use math module for performance
         if isinstance(stress_range, (int, float)) and isinstance(a_initial, (int, float)) and isinstance(a_final, (int, float)):
-            A = self.c * (geometry_factor * stress_range * math.sqrt(math.pi)) ** self.m
+            A = self._c_sqrt_pi_m * ((geometry_factor * stress_range) ** self.m)
 
-            if abs(self.m - 2.0) < 1e-9:
+            if self._m_is_2:
                 # Optimization: log(a) - log(b) = log(a/b). Avoids one log call (~35% faster).
                 integral = math.log(a_final / a_initial)
             else:
-                exponent = 1.0 - 0.5 * self.m
-                integral = (a_final ** exponent - a_initial ** exponent) / exponent
+                integral = (a_final ** self._exponent - a_initial ** self._exponent) / self._exponent
 
             return integral / A
 
         # Fallback to numpy for arrays
-        A = self.c * (geometry_factor * stress_range * np.sqrt(np.pi)) ** self.m
+        A = self._c_sqrt_np_pi_m * ((geometry_factor * stress_range) ** self.m)
 
-        if abs(self.m - 2.0) < 1e-9:
+        if self._m_is_2:
             # Optimization: log(a) - log(b) = log(a/b). Avoids one log call (~45% faster for numpy).
             integral = np.log(a_final / a_initial)
         else:
-            exponent = 1.0 - 0.5 * self.m
-            integral = (a_final ** exponent - a_initial ** exponent) / exponent
+            integral = (a_final ** self._exponent - a_initial ** self._exponent) / self._exponent
 
         return integral / A
 
