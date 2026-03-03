@@ -40,7 +40,7 @@
                     <span>Enter parameters and click Calculate.</span>
                 </div>
             </div>
-            <canvas id="crack-viewer" width="400" height="300" aria-label="Visual representation of the plate and crack"></canvas>
+            <canvas id="crack-viewer" width="400" height="300" role="img" aria-label="Visual representation of the plate and crack"></canvas>
         </section>
 
         <section id="fatigue-calculator">
@@ -460,6 +460,10 @@
                     crackInput.setCustomValidity('Crack length must be smaller than the plate width.');
                 } else {
                     crackInput.setCustomValidity('');
+                    // Live visual feedback if dimensions are valid and positive
+                    if (width > 0 && crack >= 0 && typeof drawCrack === 'function') {
+                        drawCrack(width, crack);
+                    }
                 }
             };
 
