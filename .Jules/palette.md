@@ -41,3 +41,7 @@
 ## 2026-03-05 - Missing Cursor Affordance on Labels
 **Learning:** Native `<label>` elements focus their associated inputs when clicked, but lack visual indicators for this interactivity. Users may not realize they can click the label text, especially on complex or lengthy forms. Adding a `cursor: pointer;` provides a clear visual cue for this affordance, improving usability and reducing perceived friction.
 **Action:** Always add `cursor: pointer;` to `<label>` elements in CSS to visually communicate their interactive nature to users.
+
+## 2026-03-06 - Live Visual Feedback and Canvas Accessibility
+**Learning:** When users edit physical dimensions (like width or crack length), waiting for form submission to update the visual representation breaks the connection between input and physical reality. Also, a `<canvas>` element used for rendering must explicitly include `role="img"` along with `aria-label` to be announced properly by screen readers. Hooking visual updates to the "input" event (as part of client-side validation) provides instant feedback, significantly improving the mental mapping of numbers to geometry.
+**Action:** Always hook visual representations (like charts or diagrams) to update in real-time as users modify the associated input fields, and ensure explicit semantic roles like `role="img"` are added to `<canvas>` tags.
