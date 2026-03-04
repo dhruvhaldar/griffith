@@ -45,3 +45,7 @@
 ## 2026-03-06 - Live Visual Feedback and Canvas Accessibility
 **Learning:** When users edit physical dimensions (like width or crack length), waiting for form submission to update the visual representation breaks the connection between input and physical reality. Also, a `<canvas>` element used for rendering must explicitly include `role="img"` along with `aria-label` to be announced properly by screen readers. Hooking visual updates to the "input" event (as part of client-side validation) provides instant feedback, significantly improving the mental mapping of numbers to geometry.
 **Action:** Always hook visual representations (like charts or diagrams) to update in real-time as users modify the associated input fields, and ensure explicit semantic roles like `role="img"` are added to `<canvas>` tags.
+
+## 2026-03-06 - Stale State Prevention in Calculators
+**Learning:** In interactive calculators, when a user modifies an input *after* a successful calculation, the previously rendered results (and plots) remain visible but are now mismatched with the current input values. This "stale" state can lead to users accidentally copying or misinterpreting incorrect data.
+**Action:** Implement a "Stale State Pattern" by listening to `input` events on forms and visually dimming (e.g., `opacity: 0.6`, `grayscale(100%)`) the existing result containers and plots. Additionally, explicitly disable any copy functionalities in this state to prevent errors. Clear the stale state only when a new calculation completes successfully.
