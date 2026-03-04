@@ -244,6 +244,13 @@ canvas {
     height: auto;
 }
 
+/* Palette: Stale Data Prevention Pattern */
+.stale {
+    opacity: 0.6;
+    filter: grayscale(100%);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
 /* Palette: Copy Feedback Tooltip */
 .copy-btn {
     position: relative;

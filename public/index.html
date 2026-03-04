@@ -142,11 +142,24 @@
         function clearResult(element) {
              element.innerHTML = '';
              element.classList.remove('error');
+             element.classList.remove('stale');
              element.removeAttribute('role');
+
+             // Also clear stale class from associated visualizations
+             if (element.id === 'sif-result') {
+                 const crackViewer = document.getElementById('crack-viewer');
+                 if (crackViewer) crackViewer.classList.remove('stale');
+             } else if (element.id === 'fatigue-result') {
+                 const fatiguePlot = document.getElementById('fatigue-plot');
+                 if (fatiguePlot) fatiguePlot.classList.remove('stale');
+             }
         }
 
         function showResult(element, text) {
             clearResult(element);
+
+            // Just to be safe, also explicitly remove stale here
+            element.classList.remove('stale');
 
             const container = document.createElement('div');
             container.className = 'result-container';
@@ -444,6 +457,36 @@
         });
     </script>
     <script>
+        // Palette: Stale Data Prevention Pattern
+        document.addEventListener('DOMContentLoaded', () => {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                const inputs = form.querySelectorAll('input, select');
+                const resultDiv = form.nextElementSibling; // .result div is right after form
+
+                let plotElement = null;
+                if (form.closest('#sif-calculator')) plotElement = document.getElementById('crack-viewer');
+                if (form.closest('#fatigue-calculator')) plotElement = document.getElementById('fatigue-plot');
+
+                const markStale = () => {
+                    // Only mark stale if there's an actual result showing (not empty state or error)
+                    if (resultDiv && resultDiv.querySelector('.result-container')) {
+                        resultDiv.classList.add('stale');
+
+                        // Disable copy button if it exists so users don't copy stale data
+                        const copyBtn = resultDiv.querySelector('.copy-btn');
+                        if (copyBtn) copyBtn.disabled = true;
+
+                        if (plotElement) plotElement.classList.add('stale');
+                    }
+                };
+
+                inputs.forEach(input => {
+                    input.addEventListener('input', markStale);
+                });
+            });
+        });
+
         // Palette: Client-Side Logical Validation
         document.addEventListener('DOMContentLoaded', () => {
             const widthInput = document.getElementById('width');
