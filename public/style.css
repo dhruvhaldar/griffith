@@ -336,3 +336,15 @@ label:has(+ .input-wrapper > input[required])::after {
 .unit-helper:empty {
     opacity: 0;
 }
+
+/* Palette: Keyboard Shortcut Hint */
+.shortcut-hint {
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 3px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    margin-left: 0.4rem;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}

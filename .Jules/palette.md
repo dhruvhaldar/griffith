@@ -49,3 +49,7 @@
 ## 2026-03-06 - Stale State Prevention in Calculators
 **Learning:** In interactive calculators, when a user modifies an input *after* a successful calculation, the previously rendered results (and plots) remain visible but are now mismatched with the current input values. This "stale" state can lead to users accidentally copying or misinterpreting incorrect data.
 **Action:** Implement a "Stale State Pattern" by listening to `input` events on forms and visually dimming (e.g., `opacity: 0.6`, `grayscale(100%)`) the existing result containers and plots. Additionally, explicitly disable any copy functionalities in this state to prevent errors. Clear the stale state only when a new calculation completes successfully.
+
+## 2026-03-06 - Explicit Keyboard Shortcut Affordance
+**Learning:** The 'Enter to Submit' pattern is fully functional via wrapping inputs in `<form>` and using `onsubmit`, but users lack visual affordance of this shortcut, forcing unnecessary trackpad/mouse movement to click the primary button repeatedly.
+**Action:** Always provide explicit, visual `<kbd>` hints on primary submit actions in forms to encourage fast, keyboard-driven workflows.
