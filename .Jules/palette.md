@@ -53,3 +53,7 @@
 ## 2026-03-06 - Explicit Keyboard Shortcut Affordance
 **Learning:** The 'Enter to Submit' pattern is fully functional via wrapping inputs in `<form>` and using `onsubmit`, but users lack visual affordance of this shortcut, forcing unnecessary trackpad/mouse movement to click the primary button repeatedly.
 **Action:** Always provide explicit, visual `<kbd>` hints on primary submit actions in forms to encourage fast, keyboard-driven workflows.
+
+## 2026-03-06 - Select-on-Focus for Prefilled Inputs
+**Learning:** In technical calculators where fields are heavily pre-filled with reasonable defaults (like initial crack lengths or remote stress values), users clicking into a field usually intend to entirely overwrite the existing value. Without auto-selecting the content, users are forced to manually highlight or backspace the existing value character-by-character, creating significant friction.
+**Action:** Implement a Select-on-Focus pattern (`input.addEventListener('focus', function() { this.select(); })`) for pre-filled numerical inputs so users can instantly overwrite them upon focus, streamlining data entry.
