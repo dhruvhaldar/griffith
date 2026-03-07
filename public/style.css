@@ -23,6 +23,10 @@ main {
     padding: 0 1rem;
 }
 
+#main:focus {
+    outline: none;
+}
+
 section {
     background: white;
     padding: 1.5rem;
@@ -48,6 +52,14 @@ h2 {
 label {
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+/* Palette: Active Label Highlight */
+label:has(+ input:focus),
+label:has(+ select:focus),
+label:has(+ .input-wrapper > input:focus) {
+    color: #1976D2;
 }
 
 input, select {

@@ -57,3 +57,11 @@
 ## 2026-03-06 - Select-on-Focus for Prefilled Inputs
 **Learning:** In technical calculators where fields are heavily pre-filled with reasonable defaults (like initial crack lengths or remote stress values), users clicking into a field usually intend to entirely overwrite the existing value. Without auto-selecting the content, users are forced to manually highlight or backspace the existing value character-by-character, creating significant friction.
 **Action:** Implement a Select-on-Focus pattern (`input.addEventListener('focus', function() { this.select(); })`) for pre-filled numerical inputs so users can instantly overwrite them upon focus, streamlining data entry.
+
+## 2026-03-07 - Skip-Link Target Accessibility
+**Learning:** Adding a "Skip to main content" link is useless if the target element (like `<main>`) cannot programmatically receive focus. Without `tabindex="-1"`, clicking the skip link visually scrolls the page, but the very next tab press will jump focus right back to the top of the page (e.g., to the header). Additionally, giving `<main>` focus natively triggers an unsightly focus ring that confuses sighted users.
+**Action:** Always add `tabindex="-1"` to the target element of skip links to enable programmatic focus without making it part of the normal tab sequence. Always pair this with `#target:focus { outline: none; }` in CSS to hide the focus ring.
+
+## 2026-03-07 - Active Label Highlight Pattern
+**Learning:** Native browser forms provide visual affordance for the active input (focus rings), but the user's eye often needs to refer back to the label while typing. Visually connecting the active field to its label by changing the label's text color (using the primary brand color) significantly reduces cognitive load and improves form completion speed.
+**Action:** Use the CSS `:has()` pseudo-class (e.g., `label:has(+ input:focus), label:has(+ .input-wrapper > input:focus) { color: var(--primary); }`) to elegantly highlight labels when their associated inputs are focused, supporting both direct siblings and dynamically wrapped inputs.
