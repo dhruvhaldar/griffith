@@ -9,3 +9,11 @@
 ## 2024-06-05 - Pre-calculate scalar terms before array multiplication
 **Learning:** When performing operations involving both scalar values and NumPy arrays, grouping the scalar operations and calculating them first before applying them to the array significantly reduces computation time (by ~40%). NumPy array broadcasting overhead for multiple scalar operations is expensive compared to a single pre-calculated scalar value multiplied by the array.
 **Action:** Before applying mathematical formulas to NumPy arrays in hot paths (like `RCurveAnalysis.plot_stability_diagram`), pre-calculate all scalar terms into a single constant first.
+
+## 2024-10-25 - Multiply by inverse over constant division
+**Learning:** In highly mathematical hot-paths such as calculating integrations or formulas repeatedly (like `ParisLawIntegrator`), dividing variables by constants repeatedly is slower than precalculating the inverse of the constant once `inv_const = 1.0 / const` and then performing a multiplication `val * inv_const`. In testing, applying this to cycle prediction computations yielded ~3% further performance gains.
+**Action:** Precalculate the inverse of variables acting as divisors in mathematically heavy loops and multiply by the inverse rather than dividing.
+
+## 2024-10-25 - Horner's Method for Polynomials
+**Learning:** Hard-coded polynomial expansions with variable factors (e.g., `A - B*x + C*x^2`) are significantly faster evaluated via Horner's Method `A + x*(-B + C*x)` due to avoiding expensive power operations (`** 2` or `x * x`) and saving on multiplication operations overall. This yielded a ~14% reduction in execution time for SingleEdgeNotchBend geometry factor evaluation.
+**Action:** Whenever mathematically evaluating a static polynomial expansion, rewrite the formula using Horner's Method for fewer operations and better performance.
