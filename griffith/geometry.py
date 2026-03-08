@@ -93,6 +93,10 @@ class SingleEdgeNotchBend(StressIntensityFactor):
         self.thickness = thickness
         self.crack_length = crack_length
         self.span = span
+        # ⚡ Bolt Optimization: Precalculate the constant geometry factor
+        # span / (thickness * width ** 1.5)
+        # Replacing ** 1.5 with multiplication and math.sqrt for speed
+        self._geom_const = span / (thickness * width * math.sqrt(width))
         # Initial Y calculation
         super().__init__(self._calculate_f(crack_length))
 
@@ -106,12 +110,14 @@ class SingleEdgeNotchBend(StressIntensityFactor):
 
         if isinstance(a, (int, float)):
             # Optimization: Replace ** 1.5 with multiplication and sqrt, and ** 2 with multiplication
-            numerator = 3 * math.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 - 3.93 * alpha + 2.7 * alpha * alpha))
+            # ⚡ Bolt Optimization: Use Horner's method for polynomial evaluation
+            numerator = 3 * math.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 + alpha * (-3.93 + 2.7 * alpha)))
             denominator = 2 * (1 + 2 * alpha) * one_minus_alpha * math.sqrt(one_minus_alpha)
             return numerator / denominator
 
         # Optimization: Replace ** 1.5 with multiplication and sqrt, and ** 2 with multiplication
-        numerator = 3 * np.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 - 3.93 * alpha + 2.7 * alpha * alpha))
+        # ⚡ Bolt Optimization: Use Horner's method for polynomial evaluation
+        numerator = 3 * np.sqrt(alpha) * (1.99 - alpha * one_minus_alpha * (2.15 + alpha * (-3.93 + 2.7 * alpha)))
         denominator = 2 * (1 + 2 * alpha) * one_minus_alpha * np.sqrt(one_minus_alpha)
         return numerator / denominator
 
@@ -126,7 +132,8 @@ class SingleEdgeNotchBend(StressIntensityFactor):
 
         f_val = self._calculate_f(crack_length)
 
-        return (load * self.span / (self.thickness * self.width ** 1.5)) * f_val
+        # ⚡ Bolt Optimization: Multiply precalculated geometry constant instead of recalculating
+        return load * self._geom_const * f_val
 
     def calculate_k1(self, stress, crack_length=None):
         """
