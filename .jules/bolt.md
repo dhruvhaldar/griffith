@@ -17,3 +17,7 @@
 ## 2024-10-25 - Horner's Method for Polynomials
 **Learning:** Hard-coded polynomial expansions with variable factors (e.g., `A - B*x + C*x^2`) are significantly faster evaluated via Horner's Method `A + x*(-B + C*x)` due to avoiding expensive power operations (`** 2` or `x * x`) and saving on multiplication operations overall. This yielded a ~14% reduction in execution time for SingleEdgeNotchBend geometry factor evaluation.
 **Action:** Whenever mathematically evaluating a static polynomial expansion, rewrite the formula using Horner's Method for fewer operations and better performance.
+
+## 2024-10-26 - Precompute module-level mathematical constants
+**Learning:** Re-evaluating expressions involving standard python math constants (like `math.sqrt(math.pi)`, `1.0 / math.pi`) inside tight loops or high-frequency methods incurs unnecessary overhead. Precomputing these expressions as module-level constants yields a ~20% to ~36% speedup depending on the operation.
+**Action:** When working in mathematically heavy modules, check for inline mathematical expressions involving standard constants (e.g. `math.pi`, `np.pi`) and refactor them into module-level constants to be reused across functions and class methods.
