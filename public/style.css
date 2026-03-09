@@ -242,6 +242,11 @@ input:invalid:focus {
     outline-offset: 2px;
 }
 
+.copy-btn.copied {
+    background-color: #e8f5e9;
+    color: #1e8449;
+}
+
 /* Ensure result area doesn't collapse */
 .result {
     min-height: 3rem;
