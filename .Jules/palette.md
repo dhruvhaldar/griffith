@@ -65,3 +65,7 @@
 ## 2026-03-07 - Active Label Highlight Pattern
 **Learning:** Native browser forms provide visual affordance for the active input (focus rings), but the user's eye often needs to refer back to the label while typing. Visually connecting the active field to its label by changing the label's text color (using the primary brand color) significantly reduces cognitive load and improves form completion speed.
 **Action:** Use the CSS `:has()` pseudo-class (e.g., `label:has(+ input:focus), label:has(+ .input-wrapper > input:focus) { color: var(--primary); }`) to elegantly highlight labels when their associated inputs are focused, supporting both direct siblings and dynamically wrapped inputs.
+
+## 2026-03-09 - Missing CSS Styles for JS-Toggled State Classes
+**Learning:** Adding CSS classes via JS (like `copyBtn.classList.add('copied')`) is ineffective if the corresponding CSS rules are missing. This results in missing visual affordances for success states, reducing clarity for the user even when text changes to an icon like "✅".
+**Action:** Always verify that CSS state classes dynamically toggled in JavaScript (e.g., `.copied`, `.success`, `.error`) have corresponding styles defined in the CSS files to provide full visual feedback.
