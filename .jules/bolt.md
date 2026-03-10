@@ -21,3 +21,7 @@
 ## 2024-10-26 - Precompute module-level mathematical constants
 **Learning:** Re-evaluating expressions involving standard python math constants (like `math.sqrt(math.pi)`, `1.0 / math.pi`) inside tight loops or high-frequency methods incurs unnecessary overhead. Precomputing these expressions as module-level constants yields a ~20% to ~36% speedup depending on the operation.
 **Action:** When working in mathematically heavy modules, check for inline mathematical expressions involving standard constants (e.g. `math.pi`, `np.pi`) and refactor them into module-level constants to be reused across functions and class methods.
+
+## 2025-02-28 - Multiply by 0.5 in root finding loops
+**Learning:** In hot-paths like root-finding algorithms (e.g. `_find_root` using Illinois method), dividing by `2` to find midpoints at each iteration is less optimal than multiplying. Replacing `(a + b) / 2` with `(a + b) * 0.5` avoids slower division instructions, yielding a measurable performance boost inside iterative loops.
+**Action:** When implementing or optimizing iterative numerical algorithms, avoid dividing by `2` in favor of multiplying by `0.5`.
