@@ -69,3 +69,6 @@
 ## 2026-03-09 - Missing CSS Styles for JS-Toggled State Classes
 **Learning:** Adding CSS classes via JS (like `copyBtn.classList.add('copied')`) is ineffective if the corresponding CSS rules are missing. This results in missing visual affordances for success states, reducing clarity for the user even when text changes to an icon like "✅".
 **Action:** Always verify that CSS state classes dynamically toggled in JavaScript (e.g., `.copied`, `.success`, `.error`) have corresponding styles defined in the CSS files to provide full visual feedback.
+\n## 2026-03-10 - Native Validation for Arbitrary Precision
+**Learning:** Setting specific `step` values (like `0.01`) on `<input type="number">` fields for continuous physical/scientific variables causes native HTML5 validation errors when users enter valid floats with higher precision.
+**Action:** Always use `step="any"` on `<input type="number">`, allowing arbitrary precision for physical inputs and preventing frustrating native validation errors on valid entries.

@@ -24,13 +24,13 @@
                 </select>
 
                 <label for="width">Width (m):</label>
-                <input type="number" id="width" value="0.1" step="0.01" min="0" required title="Must be a positive number">
+                <input type="number" id="width" value="0.1" step="any" min="0" required title="Must be a positive number">
 
                 <label for="crack-length">Crack Length 2a (m):</label>
-                <input type="number" id="crack-length" value="0.02" step="0.001" min="0" required title="Must be a positive number">
+                <input type="number" id="crack-length" value="0.02" step="any" min="0" required title="Must be a positive number">
 
                 <label for="stress">Remote Stress (Pa):</label>
-                <input type="number" id="stress" value="200000000" step="1000000" required>
+                <input type="number" id="stress" value="200000000" step="any" required>
 
                 <button type="submit">Calculate K_I <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
@@ -47,19 +47,19 @@
             <h2>Fatigue Life Prediction (Paris Law)</h2>
             <form class="input-group" onsubmit="event.preventDefault(); calculateFatigue(this.querySelector('button[type=submit]'))">
                 <label for="c-paris">C (MPa units):</label>
-                <input type="number" id="c-paris" value="1.5e-11" step="1e-12" min="0" required title="Must be a positive number">
+                <input type="number" id="c-paris" value="1.5e-11" step="any" min="0" required title="Must be a positive number">
 
                 <label for="m-paris">m:</label>
-                <input type="number" id="m-paris" value="3.0" step="0.1" min="0" required title="Must be a positive number">
+                <input type="number" id="m-paris" value="3.0" step="any" min="0" required title="Must be a positive number">
 
                 <label for="stress-range">Stress Range (Pa):</label>
-                <input type="number" id="stress-range" value="150000000" step="1000000" min="0" required title="Must be a positive number">
+                <input type="number" id="stress-range" value="150000000" step="any" min="0" required title="Must be a positive number">
 
                 <label for="a-initial">Initial Crack (m):</label>
-                <input type="number" id="a-initial" value="0.002" step="0.001" min="0" required title="Must be a positive number">
+                <input type="number" id="a-initial" value="0.002" step="any" min="0" required title="Must be a positive number">
 
                 <label for="a-final">Final Crack (m):</label>
-                <input type="number" id="a-final" value="0.020" step="0.001" min="0" required title="Must be a positive number">
+                <input type="number" id="a-final" value="0.020" step="any" min="0" required title="Must be a positive number">
 
                 <button type="submit">Predict Cycles <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
@@ -77,10 +77,10 @@
             <p>Material Resistance: R = 150 + 400 * sqrt(da) (kJ/m²)</p>
             <form class="input-group" onsubmit="event.preventDefault(); calculateRCurve(this.querySelector('button[type=submit]'))">
                  <label for="r-initial-crack">Initial Crack (m):</label>
-                 <input type="number" id="r-initial-crack" value="0.05" step="0.01" min="0" required title="Must be a positive number">
+                 <input type="number" id="r-initial-crack" value="0.05" step="any" min="0" required title="Must be a positive number">
 
                  <label for="r-modulus">Young's Modulus (Pa):</label>
-                 <input type="number" id="r-modulus" value="200000000000" step="1e9" min="0" required title="Must be a positive number">
+                 <input type="number" id="r-modulus" value="200000000000" step="any" min="0" required title="Must be a positive number">
 
                  <button type="submit">Analyze Stability <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
