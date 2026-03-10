@@ -37,10 +37,12 @@ def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
 
     for _ in range(max_iter):
         if (b - a) < tol:
-            return (a + b) / 2
+            # ⚡ Bolt Optimization: Multiply by 0.5 instead of dividing by 2
+            return (a + b) * 0.5
 
         if fb == fa:
-            return (a + b) / 2
+            # ⚡ Bolt Optimization: Multiply by 0.5 instead of dividing by 2
+            return (a + b) * 0.5
 
         # Regula Falsi step
         # c = (a * fb - b * fa) / (fb - fa)
@@ -50,7 +52,8 @@ def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
         # Safety: ensure c is strictly within bounds
         # Floating point errors might push c outside or equal to a/b
         if c <= a or c >= b:
-            c = (a + b) / 2
+            # ⚡ Bolt Optimization: Multiply by 0.5 instead of dividing by 2
+            c = (a + b) * 0.5
 
         fc = f(c, *args)
 
@@ -72,7 +75,8 @@ def _find_root(f, a, b, tol=1e-9, max_iter=100, args=()):
                 fa *= 0.5
             side = 1
 
-    return (a + b) / 2
+    # ⚡ Bolt Optimization: Multiply by 0.5 instead of dividing by 2
+    return (a + b) * 0.5
 
 class RCurveAnalysis:
     """
