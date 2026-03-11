@@ -72,3 +72,7 @@
 \n## 2026-03-10 - Native Validation for Arbitrary Precision
 **Learning:** Setting specific `step` values (like `0.01`) on `<input type="number">` fields for continuous physical/scientific variables causes native HTML5 validation errors when users enter valid floats with higher precision.
 **Action:** Always use `step="any"` on `<input type="number">`, allowing arbitrary precision for physical inputs and preventing frustrating native validation errors on valid entries.
+
+## 2026-03-11 - Landmark Regions Accessibility
+**Learning:** Using generic `<section>` tags for major, distinct parts of an application (like multiple interactive calculators on a single page) is insufficient for screen reader users. Without names, these regions are less helpful or completely ignored in the landmark/rotor menus, making navigation significantly slower and harder.
+**Action:** Always add explicit names to significant `<section>` or `<form>` elements by using `aria-labelledby` pointing to their respective heading IDs. This transforms them into named Landmark Regions, drastically improving programmatic navigation for assistive technologies.
