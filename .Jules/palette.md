@@ -69,10 +69,15 @@
 ## 2026-03-09 - Missing CSS Styles for JS-Toggled State Classes
 **Learning:** Adding CSS classes via JS (like `copyBtn.classList.add('copied')`) is ineffective if the corresponding CSS rules are missing. This results in missing visual affordances for success states, reducing clarity for the user even when text changes to an icon like "✅".
 **Action:** Always verify that CSS state classes dynamically toggled in JavaScript (e.g., `.copied`, `.success`, `.error`) have corresponding styles defined in the CSS files to provide full visual feedback.
-\n## 2026-03-10 - Native Validation for Arbitrary Precision
+
+## 2026-03-10 - Native Validation for Arbitrary Precision
 **Learning:** Setting specific `step` values (like `0.01`) on `<input type="number">` fields for continuous physical/scientific variables causes native HTML5 validation errors when users enter valid floats with higher precision.
 **Action:** Always use `step="any"` on `<input type="number">`, allowing arbitrary precision for physical inputs and preventing frustrating native validation errors on valid entries.
 
 ## 2026-03-11 - Landmark Regions Accessibility
 **Learning:** Using generic `<section>` tags for major, distinct parts of an application (like multiple interactive calculators on a single page) is insufficient for screen reader users. Without names, these regions are less helpful or completely ignored in the landmark/rotor menus, making navigation significantly slower and harder.
 **Action:** Always add explicit names to significant `<section>` or `<form>` elements by using `aria-labelledby` pointing to their respective heading IDs. This transforms them into named Landmark Regions, drastically improving programmatic navigation for assistive technologies.
+
+## 2026-03-12 - Contextual Disabled State Tooltips
+**Learning:** Disabling interactive elements like buttons dynamically (e.g., due to stale data) prevents errors, but without explaining *why* it's disabled, users are left confused. Also, decorative emojis inside interactive elements must be hidden from screen readers using `aria-hidden="true"`.
+**Action:** Always update the `title` and `aria-label` to provide contextual explanations for dynamically disabled states, improving both visual UX and screen reader accessibility. Wrap decorative emojis in `<span aria-hidden="true">`.

@@ -172,7 +172,7 @@
             copyBtn.className = 'copy-btn';
             copyBtn.ariaLabel = 'Copy result';
             copyBtn.title = 'Copy result to clipboard';
-            copyBtn.innerHTML = '📋';
+            copyBtn.innerHTML = '<span aria-hidden="true">📋</span>';
 
             // Palette: Add tooltip for accessible feedback
             const tooltip = document.createElement('span');
@@ -186,7 +186,7 @@
                     // Visual feedback
                     copyBtn.classList.add('copied');
                     tooltip.classList.add('show');
-                    copyBtn.childNodes[0].textContent = '✅';
+                    copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '✅';
 
                     // Accessible feedback
                     copyBtn.ariaLabel = 'Copied!';
@@ -194,7 +194,7 @@
                     setTimeout(() => {
                         copyBtn.classList.remove('copied');
                         tooltip.classList.remove('show');
-                        copyBtn.childNodes[0].textContent = '📋';
+                        copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '📋';
                         copyBtn.ariaLabel = 'Copy result';
                     }, 2000);
                 }).catch(err => {
@@ -475,7 +475,11 @@
 
                         // Disable copy button if it exists so users don't copy stale data
                         const copyBtn = resultDiv.querySelector('.copy-btn');
-                        if (copyBtn) copyBtn.disabled = true;
+                        if (copyBtn) {
+                            copyBtn.disabled = true;
+                            copyBtn.title = 'Recalculate to copy updated result';
+                            copyBtn.setAttribute('aria-label', 'Copy result (disabled, recalculate to copy)');
+                        }
 
                         if (plotElement) plotElement.classList.add('stale');
                     }
