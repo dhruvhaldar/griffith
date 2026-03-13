@@ -29,3 +29,15 @@
 ## 2025-03-05 - Avoid abs() and use float comparisons in hot loops
 **Learning:** In tight numerical loops like `_find_root`, calling `abs(x) < tol` is significantly (~40%) slower than doing a double-bounded comparison `-tol < x < tol`. In addition, comparing a float to an integer `0` inside a loop requires implicit type conversion; changing it to `0.0` provides a measurable micro-optimization.
 **Action:** When optimizing tight loop condition checks, replace absolute value checks with bound checks (`-tol < x < tol`), and always use float literals (e.g., `0.0`) when comparing against float variables.
+
+## 2025-03-05 - Native ** over math.pow()
+**Learning:** Contrary to some assumptions, for floating-point exponentiation in Python, the native `**` operator is roughly ~15% faster than calling the C-backed `math.pow()`, largely because it avoids the overhead of a function call and C-API bindings.
+**Action:** When evaluating scalar exponents inside tight mathematical loops, prefer the native `**` operator over `math.pow()`.
+
+## 2025-03-05 - The trap of type() vs isinstance() optimization
+**Learning:** While replacing `isinstance(val, (int, float))` with `type(val) in (int, float)` might appear faster in micro-benchmarks (~20% speedup), it prevents type inheritance. This breaks critical logic in scientific codebases where numpy scalars (`np.float64`) are passed, causing them to silently fail the type check and fall back to slower, generic array-processing code.
+**Action:** Always prefer `isinstance` over explicit `type()` checks when determining if a variable is a scalar to correctly support scalar types from standard numeric libraries like numpy.
+
+## 2025-03-05 - Redundant inverse multiplication in single-use variables
+**Learning:** While `inv_const = 1.0 / const` followed by `val * inv_const` is faster inside a loop where `const` is fixed and `val` changes, pre-calculating the inverse for a single subsequent multiplication (e.g., `inv_A = 1.0 / A; return integral * inv_A`) is a de-optimization. It replaces a single division with both a division and a multiplication.
+**Action:** Only precalculate inverse variables (`1.0 / X`) for multiplication if they will be multiplied against multiple different values (e.g. inside a loop). For single-use expressions, directly dividing (`val / X`) is more efficient.
