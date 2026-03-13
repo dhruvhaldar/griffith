@@ -255,6 +255,16 @@ input:invalid:focus {
     justify-content: center;
 }
 
+/* Palette: Hide Native Spin Buttons for Scientific Inputs */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+}
+
 /* Palette: Responsive Canvas Fix */
 canvas {
     max-width: 100%;
