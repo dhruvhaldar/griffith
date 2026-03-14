@@ -84,3 +84,7 @@
 ## 2026-03-13 - Native Spin Buttons on Scientific Inputs
 **Learning:** Browsers add native increment/decrement "spin buttons" to `<input type="number">` fields. For engineering/scientific applications where values are extremely large (e.g., `200000000` Pa) or extremely small (e.g., `1.5e-11`), the default step size (often `1` or what's defined in the `step` attribute) is completely useless. Worse, accidentally clicking the spin button can destroy precisely entered scientific notation or arbitrary values, causing immense user frustration. They also add visual clutter.
 **Action:** Always hide native spin buttons (`::-webkit-inner-spin-button`, `-moz-appearance: textfield`) on numerical inputs designed for high-precision or wide-ranging scientific values to prevent accidental data destruction and clean up the UI.
+
+## 2026-03-14 - iOS Safari Input Zoom and Disabled State Cursors
+**Learning:** iOS Safari will automatically zoom the page when an input is focused if its font size is less than 16px. Also, due to CSS specificity, `button:disabled` (which often sets `cursor: not-allowed`) will override the `cursor: wait` set on `button.loading`, leading to confusing UX where a loading button looks non-interactive.
+**Action:** Always set `font-size: 16px` (or `1rem` assuming a 16px base size) on `input` and `select` elements to prevent unwanted zooming on iOS. Additionally, explicitly add a `button.loading:disabled { cursor: wait; }` rule to ensure loading state cursors correctly override standard disabled state cursors.
