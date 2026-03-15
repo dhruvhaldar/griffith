@@ -88,3 +88,6 @@
 ## 2026-03-14 - iOS Safari Input Zoom and Disabled State Cursors
 **Learning:** iOS Safari will automatically zoom the page when an input is focused if its font size is less than 16px. Also, due to CSS specificity, `button:disabled` (which often sets `cursor: not-allowed`) will override the `cursor: wait` set on `button.loading`, leading to confusing UX where a loading button looks non-interactive.
 **Action:** Always set `font-size: 16px` (or `1rem` assuming a 16px base size) on `input` and `select` elements to prevent unwanted zooming on iOS. Additionally, explicitly add a `button.loading:disabled { cursor: wait; }` rule to ensure loading state cursors correctly override standard disabled state cursors.
+## 2024-03-05 - Visual Framing for Custom Input Wrappers
+**Learning:** When inputs are wrapped with additional helper elements (like the dynamic unit formatter), highlighting only the top label on focus leaves the component feeling disjointed. Highlighting both the label and the helper text synchronously creates a cohesive "visual frame" around the focused element.
+**Action:** When implementing complex input wrappers with auxiliary text, use `:has(> input:focus)` to apply the primary brand color to all associated textual elements, framing the interaction context.
