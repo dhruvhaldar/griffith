@@ -381,3 +381,25 @@ label:has(+ .input-wrapper > input[required])::after {
     margin-left: 0.4rem;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
+
+/* Palette: Tactile Button Feedback */
+button:active:not(:disabled),
+.copy-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+/* Palette: Input Hover State */
+input:hover:not(:disabled),
+select:hover:not(:disabled) {
+    border-color: #999;
+}
+
+/* Palette: Select Pointer Cursor */
+select {
+    cursor: pointer;
+}
+
+/* Palette: Active Focus Framing for Input Wrappers */
+.input-wrapper:has(> input:focus) .unit-helper {
+    color: #1976D2;
+}
