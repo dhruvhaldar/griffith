@@ -45,3 +45,11 @@
 ## 2025-03-06 - Group constant calculations to avoid chained division overhead
 **Learning:** Evaluating chained divisions or formulas of the form `a / (b / c)` is slower than combining the terms explicitly `a * (c / b)` before division. Grouping scalar math operations in the denominator before evaluating the division ensures the Python interpreter doesn't repeatedly process fraction-based divisions and results in significant (~35%) speedups for scalar mathematical evaluation operations in core hot paths.
 **Action:** Always group denominator terms and evaluate division/multiplication before a single overall multiplication/division operation instead of keeping operations separated natively, especially in frequently run mathematical modules.
+
+## 2025-03-16 - Zero measurable impact of float literals over ints in math logic
+**Learning:** In Python, converting integer literals (like `3`) to float literals (like `3.0`) in the hopes of avoiding implicit type conversion overhead during arithmetic evaluation is a micro-optimization that yields absolutely zero measurable performance benefit due to the overarching execution overhead of the Python interpreter.
+**Action:** Do not sacrifice code readability to enforce float literals inside mathematical expressions, as this is a premature micro-optimization that produces no meaningful speedup.
+
+## 2025-03-16 - Division by 2.0 vs multiplication by 0.5 in isolated scalar evaluations
+**Learning:** In Python, replacing an isolated division by a constant (e.g., `a / 2.0`) with multiplication by its decimal equivalent (`a * 0.5`) in a function that is not part of a tight iterative loop yields zero measurable performance benefit. The Python interpreter overhead overshadows the microscopic instruction-level savings.
+**Action:** Only apply `* 0.5` over `/ 2.0` in inner iterative loops (like root-finding algorithms). Do not apply it to standalone scalar mathematical assignments where it provides no measurable impact.
