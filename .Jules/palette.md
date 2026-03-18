@@ -92,6 +92,10 @@
 **Learning:** When inputs are wrapped with additional helper elements (like the dynamic unit formatter), highlighting only the top label on focus leaves the component feeling disjointed. Highlighting both the label and the helper text synchronously creates a cohesive "visual frame" around the focused element.
 **Action:** When implementing complex input wrappers with auxiliary text, use `:has(> input:focus)` to apply the primary brand color to all associated textual elements, framing the interaction context.
 
+## 2026-03-18 - Dynamic ARIA Labels on Live Canvas Elements
+**Learning:** Setting a static `aria-label` on `<canvas role="img">` elements is insufficient when the canvas updates visually based on user input. Screen reader users miss critical context changes (like updated dimensions) that sighted users see instantly.
+**Action:** When using JavaScript functions to draw or update canvas elements based on inputs, always dynamically update the `canvas.setAttribute('aria-label', ...)` to reflect the new state or geometry.
+
 ## 2026-03-17 - Respecting Reduced Motion Preferences
 **Learning:** Animations and transitions (like the result fade-in, copy tooltip slide, and loading spinners) can cause dizziness or nausea for users with vestibular disorders. While these micro-interactions add polish for some, they create an inaccessible experience for others who have explicitly opted out via OS-level settings.
 **Action:** Always include a `@media (prefers-reduced-motion: reduce)` block at the end of stylesheets to globally set animation and transition durations to practically zero (`0.01ms`), ensuring a safer, accessible experience without breaking JS event listeners that depend on transition ends.
