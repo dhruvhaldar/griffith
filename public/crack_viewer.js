@@ -7,6 +7,9 @@ function drawCrack(width, crackLength) {
     // Clear canvas
     ctx.clearRect(0, 0, w, h);
 
+    // Update aria-label dynamically
+    canvas.setAttribute('aria-label', `Visual representation of the plate (width: ${width}m) and crack (length: ${crackLength}m)`);
+
     // Scale
     const margin = 40;
     const plateWidthPx = w - 2 * margin;
