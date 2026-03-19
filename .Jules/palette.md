@@ -99,3 +99,7 @@
 ## 2026-03-17 - Respecting Reduced Motion Preferences
 **Learning:** Animations and transitions (like the result fade-in, copy tooltip slide, and loading spinners) can cause dizziness or nausea for users with vestibular disorders. While these micro-interactions add polish for some, they create an inaccessible experience for others who have explicitly opted out via OS-level settings.
 **Action:** Always include a `@media (prefers-reduced-motion: reduce)` block at the end of stylesheets to globally set animation and transition durations to practically zero (`0.01ms`), ensuring a safer, accessible experience without breaking JS event listeners that depend on transition ends.
+
+## 2026-03-20 - Responsive Plotly Charts
+**Learning:** By default, Plotly charts render with fixed dimensions based on their container size at initialization. If the window resizes or the device rotates, the chart does not automatically adjust, leading to overflowing or artificially small elements.
+**Action:** Always include the `{ responsive: true }` configuration object when calling `Plotly.newPlot(id, data, layout, config)` to ensure charts gracefully scale within responsive flex/grid layouts.

@@ -54,5 +54,7 @@ function plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor) {
         }
     };
 
-    Plotly.newPlot('fatigue-plot', [trace], layout);
+    const config = { responsive: true };
+
+    Plotly.newPlot('fatigue-plot', [trace], layout, config);
 }
