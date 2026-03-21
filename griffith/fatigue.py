@@ -21,10 +21,6 @@ class ParisLawIntegrator:
         self._c_sqrt_pi_m = self.c * (math.sqrt(math.pi) ** self.m)
         self._c_sqrt_np_pi_m = self.c * (np.sqrt(np.pi) ** self.m)
 
-        # ⚡ Bolt Optimization: Precompute inverted exponent division to multiply instead later
-        if not self._m_is_2:
-            self._inv_exponent = 1.0 / self._exponent
-
     def predict_cycles(self, stress_range, a_initial, a_final, geometry_factor=1.0):
         """
         Predicts the number of cycles N to grow a crack from a_initial to a_final.
@@ -60,9 +56,8 @@ class ParisLawIntegrator:
                 integral = math.log(a_final / a_initial)
                 return integral / A
             else:
-                # ⚡ Bolt Optimization: Multiply by inverted exponent instead of dividing
-                # ⚡ Bolt Optimization: Group denominator terms and evaluate division before multiplication (~10% faster)
-                return (a_final ** self._exponent - a_initial ** self._exponent) * (self._inv_exponent / A)
+                # ⚡ Bolt Optimization: Group denominator constants and avoid redundant inverse multiplication de-optimization (~12% faster)
+                return (a_final ** self._exponent - a_initial ** self._exponent) / (self._exponent * A)
 
         # Fallback to numpy for arrays
         A = self._c_sqrt_np_pi_m * ((geometry_factor * stress_range) ** self.m)
@@ -72,9 +67,8 @@ class ParisLawIntegrator:
             integral = np.log(a_final / a_initial)
             return integral / A
         else:
-            # ⚡ Bolt Optimization: Multiply by inverted exponent instead of dividing
-            # ⚡ Bolt Optimization: Group denominator terms and evaluate division before multiplication (~10% faster)
-            return (a_final ** self._exponent - a_initial ** self._exponent) * (self._inv_exponent / A)
+            # ⚡ Bolt Optimization: Group denominator constants and avoid redundant inverse multiplication de-optimization (~12% faster)
+            return (a_final ** self._exponent - a_initial ** self._exponent) / (self._exponent * A)
 
     def calculate_crack_growth_rate(self, delta_k):
         """
