@@ -41,7 +41,8 @@ function plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor) {
         line: {
             color: 'rgb(55, 128, 191)',
             width: 3
-        }
+        },
+        hovertemplate: '<b>Cycles:</b> %{x:,.0f}<br><b>Crack Length:</b> %{y:.2f} mm<extra></extra>'
     };
 
     const layout = {
