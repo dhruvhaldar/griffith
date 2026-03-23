@@ -103,3 +103,7 @@
 ## 2026-03-19 - Plotly Chart Responsiveness
 **Learning:** Plotly charts rendered without the `{ responsive: true }` configuration option do not automatically resize when the browser window changes dimensions or a mobile device is rotated, which can lead to clipped visualizations and a broken layout.
 **Action:** When rendering Plotly charts in responsive layouts, always include `{ responsive: true }` in the configuration object of `Plotly.newPlot()` to ensure the chart scales correctly.
+
+## 2026-03-23 - Destructive Native Keybindings on Scientific Inputs
+**Learning:** Browsers bind the `ArrowUp` and `ArrowDown` keys to increment/decrement `<input type="number">` fields. For engineering/scientific applications where values are extremely large (e.g., `200000000` Pa) or extremely small (e.g., `1.5e-11`), a user accidentally pressing an arrow key when the input is focused can instantly destroy their high-precision values by aggressively rounding or incrementing them to standard units (like `1`). This is particularly destructive for scientific notation input.
+**Action:** Always add a global or input-specific `keydown` listener that checks if `document.activeElement.type === 'number'` and calls `event.preventDefault()` for `ArrowUp` and `ArrowDown`, ensuring high-precision data is not accidentally wiped out by basic keyboard navigation.
