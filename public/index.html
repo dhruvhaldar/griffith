@@ -561,5 +561,16 @@
             }
         });
     </script>
+
+    <script>
+        // Palette: Prevent accidental value changes on number inputs from keyboard arrows
+        document.addEventListener('keydown', function(event) {
+            if (document.activeElement && document.activeElement.type === 'number') {
+                if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
