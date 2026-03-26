@@ -1,0 +1,3 @@
+## 2024-05-24 - Naming Forms for Explicit Landmark Regions
+**Learning:** Adding an `aria-labelledby` attribute to a `<form>` tag that points to the ID of its respective heading element explicitly names the form, transforming it into a recognizable Landmark Region. This vastly improves screen reader navigation and accessibility within the application.
+**Action:** When creating forms, especially in major interactive application parts wrapped in `<section>` or `<form>` tags, always ensure they use `aria-labelledby` pointing to their respective heading ID to explicitly name them as Landmark Regions.
