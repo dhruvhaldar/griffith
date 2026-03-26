@@ -72,6 +72,8 @@ input, select {
     border-radius: 4px;
     font-size: 16px; /* Prevents auto-zoom on iOS Safari */
     transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 button {
@@ -88,6 +90,8 @@ button {
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 button:hover {
@@ -241,6 +245,9 @@ input:invalid:focus {
     justify-content: center;
     color: #333; /* Reset color */
     width: auto; /* Reset width */
+    min-width: 44px;
+    min-height: 44px;
+    box-sizing: border-box;
 }
 
 .copy-btn:hover {

@@ -111,3 +111,7 @@
 ## 2026-03-25 - Mobile Keyboard Optimization for Technical Inputs
 **Learning:** Native `<input type="number">` fields often trigger less-than-ideal keyboards on mobile devices (e.g., standard keyboards with a number row, or keyboards lacking a decimal point), and browsers aggressively try to autofill engineering numbers with saved phone numbers or ZIP codes, cluttering the UI.
 **Action:** Always dynamically apply `inputmode="decimal"`, `autocomplete="off"`, and `spellcheck="false"` to all `<input type="number">` fields in engineering/scientific calculators. This forces mobile devices to present the optimal pure-numeric keypad and prevents distracting browser autofill popups on high-precision numerical inputs.
+
+## 2026-03-26 - Reliable WCAG 2.5.5 Minimum Touch Targets
+**Learning:** Native form inputs, select elements, buttons, and particularly small icon-only utility buttons often do not meet the WCAG 2.5.5 minimum touch target size of 44x44px due to default browser styling or insufficient padding. This creates a frustrating "fat finger" experience on mobile devices and reduces accessibility for users with motor impairments. Relying solely on `padding` is risky as it depends on font-size and line-height.
+**Action:** Always enforce accessible touch targets by adding `min-height: 44px` and `box-sizing: border-box` to global `input`, `select`, and `button` CSS rules. For icon-only buttons (like a copy icon), explicitly set both `min-width: 44px` and `min-height: 44px` to ensure a reliable square hit area regardless of the internal content size.
