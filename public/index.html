@@ -19,7 +19,7 @@
     <main id="main" tabindex="-1">
         <section id="sif-calculator" aria-labelledby="sif-heading">
             <h2 id="sif-heading">Stress Intensity Factor Calculator</h2>
-            <form class="input-group" onsubmit="event.preventDefault(); calculateSIF(this.querySelector('button[type=submit]'))">
+            <form class="input-group" aria-labelledby="sif-heading" onsubmit="event.preventDefault(); calculateSIF(this.querySelector('button[type=submit]'))">
                 <label for="geometry">Geometry:</label>
                 <select id="geometry">
                     <option value="CCT">Center Cracked Plate (CCT)</option>
@@ -47,7 +47,7 @@
 
         <section id="fatigue-calculator" aria-labelledby="fatigue-heading">
             <h2 id="fatigue-heading">Fatigue Life Prediction (Paris Law)</h2>
-            <form class="input-group" onsubmit="event.preventDefault(); calculateFatigue(this.querySelector('button[type=submit]'))">
+            <form class="input-group" aria-labelledby="fatigue-heading" onsubmit="event.preventDefault(); calculateFatigue(this.querySelector('button[type=submit]'))">
                 <label for="c-paris">C (MPa units):</label>
                 <input type="number" id="c-paris" value="1.5e-11" step="any" min="0" required title="Must be a positive number">
 
@@ -77,7 +77,7 @@
         <section id="r-curve-calculator" aria-labelledby="r-curve-heading">
             <h2 id="r-curve-heading">R-Curve Analysis (Stability)</h2>
             <p>Material Resistance: R = 150 + 400 * sqrt(da) (kJ/m²)</p>
-            <form class="input-group" onsubmit="event.preventDefault(); calculateRCurve(this.querySelector('button[type=submit]'))">
+            <form class="input-group" aria-labelledby="r-curve-heading" onsubmit="event.preventDefault(); calculateRCurve(this.querySelector('button[type=submit]'))">
                  <label for="r-initial-crack">Initial Crack (m):</label>
                  <input type="number" id="r-initial-crack" value="0.05" step="any" min="0" required title="Must be a positive number">
 
