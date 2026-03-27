@@ -146,14 +146,21 @@
              element.classList.remove('error');
              element.classList.remove('stale');
              element.removeAttribute('role');
+             element.removeAttribute('title'); // Palette: Clear stale tooltip
 
              // Also clear stale class from associated visualizations
              if (element.id === 'sif-result') {
                  const crackViewer = document.getElementById('crack-viewer');
-                 if (crackViewer) crackViewer.classList.remove('stale');
+                 if (crackViewer) {
+                     crackViewer.classList.remove('stale');
+                     crackViewer.removeAttribute('title');
+                 }
              } else if (element.id === 'fatigue-result') {
                  const fatiguePlot = document.getElementById('fatigue-plot');
-                 if (fatiguePlot) fatiguePlot.classList.remove('stale');
+                 if (fatiguePlot) {
+                     fatiguePlot.classList.remove('stale');
+                     fatiguePlot.removeAttribute('title');
+                 }
              }
         }
 
@@ -475,6 +482,22 @@
                     if (resultDiv && resultDiv.querySelector('.result-container')) {
                         resultDiv.classList.add('stale');
 
+                        // Palette: Add context for stale state
+                        resultDiv.setAttribute('title', 'Inputs modified. Recalculate to update.');
+
+                        // Palette: Inject screen reader warning only once
+                        if (!resultDiv.querySelector('.sr-only.stale-warning')) {
+                            const warning = document.createElement('span');
+                            warning.className = 'sr-only stale-warning';
+                            warning.textContent = ' Warning: Inputs have changed. Please recalculate to update results.';
+
+                            // Append to result-container so it's read with the result
+                            const container = resultDiv.querySelector('.result-container');
+                            if (container) {
+                                container.appendChild(warning);
+                            }
+                        }
+
                         // Disable copy button if it exists so users don't copy stale data
                         const copyBtn = resultDiv.querySelector('.copy-btn');
                         if (copyBtn) {
@@ -484,6 +507,7 @@
                         }
 
                         if (plotElement) plotElement.classList.add('stale');
+                        if (plotElement) plotElement.setAttribute('title', 'Inputs modified. Recalculate to update.');
                     }
                 };
 

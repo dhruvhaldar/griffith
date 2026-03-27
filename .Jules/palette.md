@@ -115,3 +115,7 @@
 ## 2026-03-26 - Reliable WCAG 2.5.5 Minimum Touch Targets
 **Learning:** Native form inputs, select elements, buttons, and particularly small icon-only utility buttons often do not meet the WCAG 2.5.5 minimum touch target size of 44x44px due to default browser styling or insufficient padding. This creates a frustrating "fat finger" experience on mobile devices and reduces accessibility for users with motor impairments. Relying solely on `padding` is risky as it depends on font-size and line-height.
 **Action:** Always enforce accessible touch targets by adding `min-height: 44px` and `box-sizing: border-box` to global `input`, `select`, and `button` CSS rules. For icon-only buttons (like a copy icon), explicitly set both `min-width: 44px` and `min-height: 44px` to ensure a reliable square hit area regardless of the internal content size.
+
+## 2026-03-27 - Contextual Warning for Visually Dimmed Stale States
+**Learning:** While dimming results prevents copying "stale" data, users (both sighted and screen reader) may be confused about *why* the content is dimmed or disabled without explicit context. Visual dimming is completely hidden from assistive technologies.
+**Action:** When applying a "stale" visual state, always add an explicit `title` attribute for mouse-hover tooltips, and dynamically inject an `.sr-only` warning span containing text like "Warning: Inputs have changed. Please recalculate" so that screen readers announce the context change explicitly.
