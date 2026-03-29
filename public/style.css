@@ -272,6 +272,10 @@ input:invalid:focus {
     justify-content: center;
 }
 
+.result:focus {
+    outline: none;
+}
+
 /* Palette: Hide Native Spin Buttons for Scientific Inputs */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {

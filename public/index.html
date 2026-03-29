@@ -139,6 +139,8 @@
 
             element.appendChild(icon);
             element.appendChild(document.createTextNode(message));
+            element.setAttribute('tabindex', '-1');
+            element.focus();
         }
 
         function clearResult(element) {
@@ -213,6 +215,9 @@
             container.appendChild(copyBtn);
 
             element.appendChild(container);
+
+            element.setAttribute('tabindex', '-1');
+            element.focus();
         }
 
         async function calculateSIF(btn) {
@@ -341,6 +346,8 @@
                             `Critical Stress: ${(data.critical_stress/1e6).toFixed(2)} MPa, Extension: ${(data.critical_extension*1000).toFixed(2)} mm`);
                     } else {
                         resultDiv.innerText = data.message;
+                        resultDiv.setAttribute('tabindex', '-1');
+                        resultDiv.focus();
                     }
                 } else {
                     showError(resultDiv, "Error calculating R-Curve.");
