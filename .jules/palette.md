@@ -1,3 +1,7 @@
 ## 2024-05-24 - Naming Forms for Explicit Landmark Regions
 **Learning:** Adding an `aria-labelledby` attribute to a `<form>` tag that points to the ID of its respective heading element explicitly names the form, transforming it into a recognizable Landmark Region. This vastly improves screen reader navigation and accessibility within the application.
 **Action:** When creating forms, especially in major interactive application parts wrapped in `<section>` or `<form>` tags, always ensure they use `aria-labelledby` pointing to their respective heading ID to explicitly name them as Landmark Regions.
+
+## 2024-10-25 - Accessible Form Error States via CSS :has()
+**Learning:** Validations states can be automatically propagated to their associated `<label>` tags purely using CSS. By using the `:has()` selector on the `<label>`, when an adjacent input becomes `:invalid`, the label itself can reflect this state without needing any JavaScript to toggle classes. This ensures immediate feedback for users filling out required fields, maintaining accessible and robust client-side validation natively.
+**Action:** When setting up `<form>` tags containing `<input>` elements that have validation constraints (like `required`, `min`, `max`), utilize the `label:has(+ input:invalid)` CSS rule to easily and reliably style labels to display error states (e.g. changing color or injecting warning icons).

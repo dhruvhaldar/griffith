@@ -199,6 +199,19 @@ input:invalid:focus {
     outline-color: #e74c3c;
 }
 
+/* Palette: Accessible Error States on Labels */
+label:has(+ input:invalid),
+label:has(+ select:invalid),
+label:has(+ .input-wrapper > input:invalid) {
+    color: #c0392b !important;
+}
+
+label:has(+ input:invalid)::before,
+label:has(+ select:invalid)::before,
+label:has(+ .input-wrapper > input:invalid)::before {
+    content: "⚠️ ";
+}
+
 /* Responsive & Accessibility Enhancements */
 .skip-link {
     position: absolute;
