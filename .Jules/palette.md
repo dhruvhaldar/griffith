@@ -119,3 +119,7 @@
 ## 2026-03-27 - Contextual Warning for Visually Dimmed Stale States
 **Learning:** While dimming results prevents copying "stale" data, users (both sighted and screen reader) may be confused about *why* the content is dimmed or disabled without explicit context. Visual dimming is completely hidden from assistive technologies.
 **Action:** When applying a "stale" visual state, always add an explicit `title` attribute for mouse-hover tooltips, and dynamically inject an `.sr-only` warning span containing text like "Warning: Inputs have changed. Please recalculate" so that screen readers announce the context change explicitly.
+
+## 2026-03-28 - Focus Management for Async Results
+**Learning:** For asynchronous calculators on mobile devices, when users submit a form, the virtual keyboard remains open and obscures the result displayed lower on the page, forcing users to manually dismiss the keyboard. Screen readers also may not instantly navigate to the dynamically inserted content.
+**Action:** Whenever an asynchronous result or error is successfully displayed in a dynamic container (like `#result`), explicitly add `tabindex="-1"` and programmatically focus the container (`element.focus()`). This action naturally dismisses the mobile virtual keyboard, natively scrolls the new result into the viewport, and directly aids screen readers in finding the new content, significantly improving the end-to-end user experience.
