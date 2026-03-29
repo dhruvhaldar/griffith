@@ -53,5 +53,7 @@ class StressIntensityFactor:
              # ⚡ Bolt Optimization: Multiply module-level constant _INV_PI to avoid repeated 1.0 / math.pi evaluation (~20% faster)
              val = k_ic / (geometry_factor * stress)
              return _INV_PI * (val * val)
-        val = k_ic / (geometry_factor * stress)
+
+        # ⚡ Bolt Optimization: Explicitly wrap the scalar division in the numerator to avoid chained array broadcasting overhead
+        val = (k_ic / geometry_factor) / stress
         return _INV_NP_PI * (val * val)
