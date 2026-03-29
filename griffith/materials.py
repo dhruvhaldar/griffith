@@ -28,7 +28,8 @@ class Material:
         # a_c = (1/pi) * (K_IC / (Y * sigma))^2
         # ⚡ Bolt Optimization: Replace ** 2 with multiplication for a 12% speedup in hot paths
         # ⚡ Bolt Optimization: Multiply module-level constant _INV_NP_PI to avoid repeated 1.0 / np.pi evaluation (~20% faster)
-        val = self.k_ic / (geometry_factor * stress)
+        # ⚡ Bolt Optimization: Explicitly wrap the scalar division in the numerator to avoid chained array broadcasting overhead
+        val = (self.k_ic / geometry_factor) / stress
         return _INV_NP_PI * (val * val)
 
 class Steel(Material):

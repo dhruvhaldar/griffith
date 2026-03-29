@@ -68,3 +68,7 @@
 ## 2025-03-23 - Group scalar multiplications before array division
 **Learning:** When performing a scalar multiplication alongside an array division `scalar * (array / denominator_array)` or `scalar * (array_numerator / array_denominator)`, moving the scalar into the numerator `(scalar * array) / denominator_array` reduces the number of array broadcasting passes required and is ~18% faster for large NumPy arrays.
 **Action:** When a calculation returns a scalar multiplied by the result of an array division, explicitly wrap the scalar multiplication in the numerator to avoid chained array broadcasting overhead.
+
+## 2025-03-23 - Group scalar division before array division
+**Learning:** When performing a NumPy array division involving a scalar numerator and a scalar multiplied by an array in the denominator (e.g., `scalar_A / (scalar_B * array)`), the expression evaluates an intermediate array for the denominator product and a second intermediate array for the overall division. Explicitly grouping the scalars first (`(scalar_A / scalar_B) / array`) avoids creating an intermediate array for the denominator product, effectively halving the memory allocation and array broadcasting overhead.
+**Action:** When evaluating formulas involving scalar numerators and array denominators, explicitly evaluate scalar quotients before performing the single array division.
