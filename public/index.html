@@ -150,6 +150,18 @@
              element.removeAttribute('role');
              element.removeAttribute('title'); // Palette: Clear stale tooltip
 
+             // Palette: Remove recalculate highlight from associated button
+             const parentSection = element.closest('section');
+             if (parentSection) {
+                 const submitBtn = parentSection.querySelector('form button[type="submit"]');
+                 if (submitBtn) {
+                     submitBtn.classList.remove('needs-recalc');
+                     if (submitBtn.getAttribute('aria-label') === 'Recalculate (inputs modified)') {
+                         submitBtn.removeAttribute('aria-label');
+                     }
+                 }
+             }
+
              // Also clear stale class from associated visualizations
              if (element.id === 'sif-result') {
                  const crackViewer = document.getElementById('crack-viewer');
@@ -515,6 +527,13 @@
 
                         if (plotElement) plotElement.classList.add('stale');
                         if (plotElement) plotElement.setAttribute('title', 'Inputs modified. Recalculate to update.');
+
+                        // Palette: Highlight the recalculate button
+                        const submitBtn = form.querySelector('button[type="submit"]');
+                        if (submitBtn) {
+                            submitBtn.classList.add('needs-recalc');
+                            submitBtn.setAttribute('aria-label', 'Recalculate (inputs modified)');
+                        }
                     }
                 };
 

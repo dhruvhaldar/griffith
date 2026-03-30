@@ -325,6 +325,18 @@ canvas {
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
+/* Palette: Attention Pulse for Recalculation */
+@keyframes attention-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(25, 118, 210, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0); }
+}
+
+button.needs-recalc:not(:disabled) {
+    animation: attention-pulse 2s infinite;
+    border: 2px solid #1976D2; /* Explicitly highlight */
+}
+
 /* Palette: Copy Feedback Tooltip */
 .copy-btn {
     position: relative;
