@@ -72,3 +72,7 @@
 ## 2025-03-23 - Group scalar division before array division
 **Learning:** When performing a NumPy array division involving a scalar numerator and a scalar multiplied by an array in the denominator (e.g., `scalar_A / (scalar_B * array)`), the expression evaluates an intermediate array for the denominator product and a second intermediate array for the overall division. Explicitly grouping the scalars first (`(scalar_A / scalar_B) / array`) avoids creating an intermediate array for the denominator product, effectively halving the memory allocation and array broadcasting overhead.
 **Action:** When evaluating formulas involving scalar numerators and array denominators, explicitly evaluate scalar quotients before performing the single array division.
+
+## 2025-03-31 - Precalculate constant combinations as module-level constants
+**Learning:** In heavily executed functions, such as root finding functions like `_instability_target_func`, evaluating explicit constant arithmetic (like `0.5 / 1e-6`) inline incurs runtime overhead. Precalculating these constant combinations as module-level constants (e.g., `_EPSILON = 1e-6; _INV_2_EPS = 0.5 / _EPSILON`) saves a small amount of time inside each loop iteration, improving execution speed while preserving the mathematical relationships and code maintainability.
+**Action:** Always extract inline numerical evaluations of constant numbers to precalculated module-level constants when inside heavily computed functions like those in root-finding or fatigue crack growth simulations.
