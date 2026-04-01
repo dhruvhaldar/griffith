@@ -164,6 +164,18 @@ button.loading:disabled {
     cursor: wait;
 }
 
+/* Palette: Pulse animation to highlight needed recalculation */
+@keyframes pulse-recalc {
+    0% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(25, 118, 210, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(25, 118, 210, 0); }
+}
+
+button.needs-recalc {
+    animation: pulse-recalc 2s infinite;
+    border: 2px solid #0D47A1;
+}
+
 /* Focus Visibility */
 button:focus-visible, input:focus-visible, select:focus-visible {
     outline: 2px solid #2c3e50;
