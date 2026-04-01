@@ -123,3 +123,7 @@
 ## 2026-03-28 - Focus Management for Async Results
 **Learning:** For asynchronous calculators on mobile devices, when users submit a form, the virtual keyboard remains open and obscures the result displayed lower on the page, forcing users to manually dismiss the keyboard. Screen readers also may not instantly navigate to the dynamically inserted content.
 **Action:** Whenever an asynchronous result or error is successfully displayed in a dynamic container (like `#result`), explicitly add `tabindex="-1"` and programmatically focus the container (`element.focus()`). This action naturally dismisses the mobile virtual keyboard, natively scrolls the new result into the viewport, and directly aids screen readers in finding the new content, significantly improving the end-to-end user experience.
+
+## 2026-03-31 - Closing the Loop on Stale States
+**Learning:** While dimming results prevents copying "stale" data, users may still overlook the need to click "Calculate" again to update the results. Without a visual and accessible cue pointing to the next required action, the user flow is broken.
+**Action:** When implementing a Stale State pattern where results are visually dimmed due to modified inputs, "close the loop" by adding a subtle visual highlight (e.g., a pulsing animation) to the primary recalculate/submit button and dynamically updating its `aria-label` to explicitly inform screen reader users that a recalculation is pending.
