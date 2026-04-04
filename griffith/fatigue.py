@@ -47,7 +47,7 @@ class ParisLawIntegrator:
             float: Number of cycles N.
         """
         # Check if inputs are scalars to use math module for performance
-        if isinstance(stress_range, (int, float)) and isinstance(a_initial, (int, float)) and isinstance(a_final, (int, float)):
+        if np.isscalar(stress_range) and np.isscalar(a_initial) and np.isscalar(a_final):
             # ⚡ Bolt Optimization: Replace math.pow with ** operator for ~15% faster scalar float exponentiation
             A = self._c_sqrt_pi_m * ((geometry_factor * stress_range) ** self.m)
 
