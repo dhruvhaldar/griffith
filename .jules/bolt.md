@@ -53,6 +53,7 @@
 ## 2025-03-16 - Division by 2.0 vs multiplication by 0.5 in isolated scalar evaluations
 **Learning:** In Python, replacing an isolated division by a constant (e.g., `a / 2.0`) with multiplication by its decimal equivalent (`a * 0.5`) in a function that is not part of a tight iterative loop yields zero measurable performance benefit. The Python interpreter overhead overshadows the microscopic instruction-level savings.
 **Action:** Only apply `* 0.5` over `/ 2.0` in inner iterative loops (like root-finding algorithms). Do not apply it to standalone scalar mathematical assignments where it provides no measurable impact.
+
 ## 2025-03-19 - Save a multiplication operation in Regula Falsi
 **Learning:** In the root finding hot path `_find_root` using Regula Falsi or Illinois algorithm, replacing the standard calculation `c = (a * fb - b * fa) / (fb - fa)` with `c = a + fa * (a - b) / (fb - fa)` algebraically achieves exactly the same result but avoids one floating point multiplication. Timing analysis confirms this formulation runs ~15% faster.
 **Action:** Always use the `c = a + fa * (a - b) / (fb - fa)` formulation when implementing root finding algorithms to save a multiplication operation and improve performance in hot paths.
@@ -80,3 +81,11 @@
 ## 2025-04-10 - Pre-multiply constants into polynomial coefficients
 **Learning:** When evaluating a static polynomial approximation (especially with Horner's Method) that is subsequently multiplied by a constant factor (e.g. `1.5 * (a + b*x + c*x^2)`), pre-multiplying that constant directly into the polynomial coefficients entirely eliminates one runtime multiplication operation. For scalar inputs this yielded a ~4% speedup, but for large NumPy arrays, eliminating an entire array broadcasting multiplication pass resulted in a ~23% performance improvement in SENB geometry factor calculations.
 **Action:** Always algebraically distribute and pre-multiply constant multiplier values into the static coefficients of hardcoded polynomials before runtime.
+
+## 2025-04-12 - Robust scalar identification with np.isscalar
+**Learning:** The previous optimization of using `isinstance(x, (int, float))` to route scalars to fast `math` functions instead of slow `numpy` functions silently failed for valid NumPy scalar types like `np.int64` or `np.float32`. This caused single-value NumPy scalars to unexpectedly fallback into the slower array-processing path. Replacing `isinstance` with `np.isscalar(x)` correctly identifies all scalar types and properly routes them to the fast evaluation path, regaining the performance benefit for these types.
+**Action:** In NumPy-heavy computational code, always prefer `np.isscalar(x)` over `isinstance(x, (int, float))` to accurately test for scalar values and ensure correct execution routing.
+
+## 2025-04-12 - Fallback logic for array numerators in division optimizations
+**Learning:** While calculating `(scalar_A / scalar_B) / array_C` is highly efficient, blindly applying this pattern when the numerator is also an array (`(array_A / scalar_B) / array_C`) forces numpy to evaluate two separate array broadcasting passes. This de-optimized execution time by ~34% compared to the standard `array_A / (scalar_B * array_C)`.
+**Action:** When grouping divisions for polymorphic inputs (where the numerator could be a scalar or an array), wrap the grouped optimization `(num / denom) / array` in an `np.isscalar(num)` check. If the numerator is an array, explicitly fallback to `num / (denom * array)`.

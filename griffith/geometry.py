@@ -37,7 +37,7 @@ class CenterCrackedPlate(StressIntensityFactor):
         alpha = a / (W/2) = 2a / W
         Y = sqrt(sec(pi * a / W)) (Approximation)
         """
-        if isinstance(crack_length_2a, (int, float)):
+        if np.isscalar(crack_length_2a):
             return _calculate_cct_y_scalar(crack_length_2a, self.width)
 
         alpha = crack_length_2a / self.width
@@ -61,15 +61,15 @@ class CenterCrackedPlate(StressIntensityFactor):
         # Optimize primarily for scalars (API usage)
         should_calculate = True
 
-        if isinstance(crack_length, (int, float)):
+        if np.isscalar(crack_length):
              # Only check cache for scalars
-             if (isinstance(self._last_calc_crack_length, (int, float)) and
+             if (np.isscalar(self._last_calc_crack_length) and
                  abs(crack_length - self._last_calc_crack_length) < 1e-12):
                  should_calculate = False
 
         if should_calculate:
             self.geometry_factor = self._calculate_geometry_factor(crack_length)
-            if isinstance(crack_length, (int, float)):
+            if np.isscalar(crack_length):
                 self._last_calc_crack_length = crack_length
             else:
                 # Invalidate cache for array inputs or other types
@@ -112,7 +112,7 @@ class SingleEdgeNotchBend(StressIntensityFactor):
         one_minus_alpha = 1.0 - alpha
         # Standard ASTM E399 formula
 
-        if isinstance(a, (int, float)):
+        if np.isscalar(a):
             # Optimization: Replace ** 1.5 with multiplication and sqrt, and ** 2 with multiplication
             # ⚡ Bolt Optimization: Use Horner's method for polynomial evaluation
             # ⚡ Bolt Optimization: Group scalar operations (3/2 = 1.5) before multiplication to avoid chained operations
