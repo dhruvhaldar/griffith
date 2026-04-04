@@ -54,6 +54,10 @@ class StressIntensityFactor:
              val = k_ic / (geometry_factor * stress)
              return _INV_PI * (val * val)
 
-        # ⚡ Bolt Optimization: Explicitly wrap the scalar division in the numerator to avoid chained array broadcasting overhead
-        val = (k_ic / geometry_factor) / stress
+        if np.isscalar(k_ic):
+            # ⚡ Bolt Optimization: Group scalar division in numerator to avoid intermediate array allocation
+            val = (k_ic / geometry_factor) / stress
+        else:
+            # ⚡ Bolt Optimization: Group scalar multiplication in denominator to avoid multiple array divisions
+            val = k_ic / (geometry_factor * stress)
         return _INV_NP_PI * (val * val)
