@@ -144,7 +144,7 @@ class RCurveAnalysis:
         # sigma^2 = J * E / (Y^2 * pi * a)
 
         # ⚡ Bolt Optimization: Replace ** 2 with multiplication for a 12% speedup in hot paths
-        if isinstance(r_crit, (int, float)) and isinstance(a_crit, (int, float)):
+        if np.isscalar(r_crit) and np.isscalar(a_crit):
              sigma_c = math.sqrt(r_crit * youngs_modulus / (geometry_factor * geometry_factor * math.pi * a_crit))
         else:
              sigma_c = np.sqrt(r_crit * youngs_modulus / (geometry_factor * geometry_factor * np.pi * a_crit))
