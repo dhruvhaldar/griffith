@@ -70,7 +70,11 @@ class ParisLawIntegrator:
         else:
             # ⚡ Bolt Optimization: Group denominator constants and avoid redundant inverse multiplication de-optimization (~12% faster)
             # ⚡ Bolt Optimization: Removed single-use inverse multiplication de-optimization (~10% faster)
-            return (a_final ** self._exponent - a_initial ** self._exponent) / (self._exponent * A)
+            # ⚡ Bolt Optimization: Group scalar division before array division to avoid intermediate array allocation
+            num = a_final ** self._exponent - a_initial ** self._exponent
+            if isinstance(num, (int, float)):
+                return (num / self._exponent) / A
+            return num / (self._exponent * A)
 
     def calculate_crack_growth_rate(self, delta_k):
         """
