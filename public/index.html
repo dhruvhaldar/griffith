@@ -150,6 +150,9 @@
              element.removeAttribute('role');
              element.removeAttribute('title'); // Palette: Clear stale tooltip
 
+             // Palette: Revert document title
+             document.title = 'Griffith Fracture Mechanics';
+
              // Also clear stale class from associated visualizations
              if (element.id === 'sif-result') {
                  const crackViewer = document.getElementById('crack-viewer');
@@ -168,6 +171,9 @@
 
         function showResult(element, text) {
             clearResult(element);
+
+            // Palette: Set document title to result for tab context
+            document.title = `${text} | Griffith Fracture Mechanics`;
 
             // Just to be safe, also explicitly remove stale here
             element.classList.remove('stale');

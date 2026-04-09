@@ -127,3 +127,7 @@
 ## 2026-03-31 - Closing the Loop on Stale States
 **Learning:** While dimming results prevents copying "stale" data, users may still overlook the need to click "Calculate" again to update the results. Without a visual and accessible cue pointing to the next required action, the user flow is broken.
 **Action:** When implementing a Stale State pattern where results are visually dimmed due to modified inputs, "close the loop" by adding a subtle visual highlight (e.g., a pulsing animation) to the primary recalculate/submit button and dynamically updating its `aria-label` to explicitly inform screen reader users that a recalculation is pending.
+
+## 2026-04-09 - Dynamic Document Titles for Contextual Awareness
+**Learning:** For multi-calculator single-page apps, when users copy results or switch tabs, the static document title provides no context about their current calculation.
+**Action:** Update the `document.title` to include the specific result (e.g., `K_I = 12.3 MPa√m | App Name`) immediately after calculation, and revert it to the base title when the inputs are modified or cleared. This significantly aids user orientation and multitasking.
