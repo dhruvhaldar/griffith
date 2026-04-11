@@ -501,6 +501,9 @@
                     if (resultDiv && resultDiv.querySelector('.result-container')) {
                         resultDiv.classList.add('stale');
 
+                        // Palette: Revert document title on stale state
+                        document.title = 'Griffith Fracture Mechanics';
+
                         // Palette: Add context for stale state
                         resultDiv.setAttribute('title', 'Inputs modified. Recalculate to update.');
 
