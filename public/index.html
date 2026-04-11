@@ -116,6 +116,13 @@
             return plotlyPromise;
         }
 
+        function toggleFormInputs(form, disabled) {
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.disabled = disabled;
+            });
+        }
+
         function validateInputs(containerId) {
             const container = document.getElementById(containerId);
             const inputs = container.querySelectorAll('input, select');
@@ -229,6 +236,9 @@
         async function calculateSIF(btn) {
             if (!validateInputs('sif-calculator')) return;
 
+            const form = btn.closest('form');
+            toggleFormInputs(form, true);
+
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Calculating...';
             btn.classList.add('loading');
@@ -265,11 +275,15 @@
                 btn.classList.remove('loading');
                 btn.disabled = false;
                 btn.removeAttribute('aria-busy');
+                toggleFormInputs(form, false);
             }
         }
 
         async function calculateFatigue(btn) {
             if (!validateInputs('fatigue-calculator')) return;
+
+            const form = btn.closest('form');
+            toggleFormInputs(form, true);
 
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Predicting...';
@@ -323,11 +337,15 @@
                 btn.classList.remove('loading');
                 btn.disabled = false;
                 btn.removeAttribute('aria-busy');
+                toggleFormInputs(form, false);
             }
         }
 
         async function calculateRCurve(btn) {
             if (!validateInputs('r-curve-calculator')) return;
+
+            const form = btn.closest('form');
+            toggleFormInputs(form, true);
 
             const originalContent = btn.innerHTML;
             btn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Analyzing...';
@@ -372,6 +390,7 @@
                 btn.classList.remove('loading');
                 btn.disabled = false;
                 btn.removeAttribute('aria-busy');
+                toggleFormInputs(form, false);
             }
         }
     </script>
