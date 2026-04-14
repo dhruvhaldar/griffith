@@ -13,3 +13,7 @@
 ## 2026-04-12 - Accessible Transient Feedback
 **Learning:** Changing `aria-label` on a focused element often fails to trigger a screen reader announcement. For transient actions like copying, an explicit `aria-live` region is necessary.
 **Action:** Implement a global `a11y-announcer` live region and dynamically update its text to provide reliable feedback for transient interactions.
+
+## 2024-10-26 - Accessible Form Disabled States via CSS :has()
+**Learning:** When form inputs are disabled (e.g., during async operations), leaving the associated `<label>` fully styled creates a disjointed user experience where the label appears active but the input is locked. We can propagate the `disabled` state to the `<label>` purely using CSS via the `:has()` selector (e.g., `label:has(+ input:disabled)`), allowing the label to visually dim alongside the input.
+**Action:** When setting up `<form>` inputs that can be dynamically disabled, utilize the `label:has(+ input:disabled)` CSS rule to easily and reliably style labels to display their locked state (e.g. reducing opacity and setting cursor to not-allowed).
