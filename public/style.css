@@ -168,6 +168,14 @@ input:disabled, select:disabled {
     border-color: #dcdcdc;
 }
 
+/* Palette: Disabled Label State */
+label:has(+ input:disabled),
+label:has(+ select:disabled),
+label:has(+ .input-wrapper > input:disabled) {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 button.loading:disabled {
     cursor: wait;
 }
