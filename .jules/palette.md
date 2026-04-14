@@ -9,3 +9,7 @@
 ## 2024-04-11 - Disabling Form Inputs During Async Calculations
 **Learning:** While disabling the submit button during an async calculation prevents double-submissions, leaving the input fields active allows users to modify values while the request is pending. If the request completes and renders the result, it will appear to correspond to the *new* input values, creating a confusing race condition.
 **Action:** Always disable the entire form (all `input` and `select` elements) during an asynchronous calculation, and add appropriate visual styling (`opacity`, `cursor: not-allowed`, `background-color`) to clearly communicate that the form is temporarily locked.
+
+## 2026-04-12 - Accessible Transient Feedback
+**Learning:** Changing `aria-label` on a focused element often fails to trigger a screen reader announcement. For transient actions like copying, an explicit `aria-live` region is necessary.
+**Action:** Implement a global `a11y-announcer` live region and dynamically update its text to provide reliable feedback for transient interactions.

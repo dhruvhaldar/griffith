@@ -10,6 +10,7 @@
     <link rel="prefetch" href="https://cdn.plot.ly/plotly-latest.min.js">
 </head>
 <body>
+    <div id="a11y-announcer" class="sr-only" aria-live="polite"></div>
     <a href="#main" class="skip-link">Skip to main content</a>
     <header>
         <h1>Griffith</h1>
@@ -98,6 +99,17 @@
     <script src="crack_viewer.js"></script>
     <script src="growth_plot.js"></script>
     <script>
+        function announceToScreenReader(message) {
+            const announcer = document.getElementById('a11y-announcer');
+            if (announcer) {
+                // Clear and re-set to re-trigger polite announcement for repeated messages
+                announcer.textContent = '';
+                setTimeout(() => {
+                    announcer.textContent = message;
+                }, 50);
+            }
+        }
+
         let plotlyPromise = null;
         function loadPlotly() {
             if (window.Plotly) return Promise.resolve();
@@ -214,6 +226,7 @@
 
                     // Accessible feedback
                     copyBtn.ariaLabel = 'Copied!';
+                    announceToScreenReader('Result copied to clipboard');
 
                     setTimeout(() => {
                         copyBtn.classList.remove('copied');
