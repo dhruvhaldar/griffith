@@ -17,3 +17,7 @@
 ## 2024-10-26 - Accessible Form Disabled States via CSS :has()
 **Learning:** When form inputs are disabled (e.g., during async operations), leaving the associated `<label>` fully styled creates a disjointed user experience where the label appears active but the input is locked. We can propagate the `disabled` state to the `<label>` purely using CSS via the `:has()` selector (e.g., `label:has(+ input:disabled)`), allowing the label to visually dim alongside the input.
 **Action:** When setting up `<form>` inputs that can be dynamically disabled, utilize the `label:has(+ input:disabled)` CSS rule to easily and reliably style labels to display their locked state (e.g. reducing opacity and setting cursor to not-allowed).
+
+## 2024-10-27 - Double-Announcement via Focus + aria-live
+**Learning:** If an element is dynamically focused (e.g., using `element.focus()` with `tabindex="-1"`) after an asynchronous operation, screen readers will automatically read its contents because of the focus event. Adding `aria-live="polite"` to that same container causes the screen reader to announce it twice—once for the live region update, and once for the focus—resulting in confusing, stuttering verbosity.
+**Action:** When programmatically moving focus to a result container for accessibility, do not put `aria-live` on that container. Rely solely on the focus event to trigger the reading.
