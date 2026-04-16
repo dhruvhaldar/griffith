@@ -37,7 +37,7 @@
 
                 <button type="submit">Calculate K_I <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
-            <div id="sif-result" class="result" aria-live="polite">
+            <div id="sif-result" class="result">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
                     <span>Enter parameters and click Calculate.</span>
@@ -66,7 +66,7 @@
 
                 <button type="submit">Predict Cycles <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
-            <div id="fatigue-result" class="result" aria-live="polite">
+            <div id="fatigue-result" class="result">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
                     <span>Enter parameters and click Calculate.</span>
@@ -87,7 +87,7 @@
 
                  <button type="submit">Analyze Stability <kbd aria-hidden="true" class="shortcut-hint">↵</kbd></button>
             </form>
-            <div id="r-curve-result" class="result" aria-live="polite">
+            <div id="r-curve-result" class="result">
                 <div class="empty-state">
                     <span class="icon" aria-hidden="true">ℹ️</span>
                     <span>Enter parameters and click Calculate.</span>
@@ -388,9 +388,7 @@
                         showResult(resultDiv,
                             `Critical Stress: ${(data.critical_stress/1e6).toFixed(2)} MPa, Extension: ${(data.critical_extension*1000).toFixed(2)} mm`);
                     } else {
-                        resultDiv.innerText = data.message;
-                        resultDiv.setAttribute('tabindex', '-1');
-                        resultDiv.focus();
+                        showResult(resultDiv, data.message);
                     }
                 } else {
                     showError(resultDiv, "Error calculating R-Curve.");
