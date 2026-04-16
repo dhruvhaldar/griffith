@@ -1,0 +1,12 @@
+<<<<<<< SEARCH
+            const container = document.createElement('div');
+            container.className = 'result-container';
+
+            const textSpan = document.createElement('span');
+=======
+            const container = document.createElement('div');
+            container.className = 'result-container';
+            container.setAttribute('tabindex', '-1');
+
+            const textSpan = document.createElement('span');
+>>>>>>> REPLACE
