@@ -1,0 +1,52 @@
+<<<<<<< SEARCH
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(text).then(() => {
+                    // Visual feedback
+                    copyBtn.classList.add('copied');
+                    tooltip.classList.add('show');
+                    copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '✅';
+
+                    // Accessible feedback
+                    copyBtn.ariaLabel = 'Copied!';
+                    announceToScreenReader('Result copied to clipboard');
+
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        tooltip.classList.remove('show');
+                        copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '📋';
+                        copyBtn.ariaLabel = 'Copy result';
+                    }, 2000);
+                });
+            };
+
+            container.appendChild(copyBtn);
+            element.appendChild(container);
+        }
+=======
+            copyBtn.onclick = () => {
+                navigator.clipboard.writeText(text).then(() => {
+                    // Visual feedback
+                    copyBtn.classList.add('copied');
+                    tooltip.classList.add('show');
+                    copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '✅';
+
+                    // Accessible feedback
+                    copyBtn.ariaLabel = 'Copied!';
+                    announceToScreenReader('Result copied to clipboard');
+
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        tooltip.classList.remove('show');
+                        copyBtn.querySelector('span:not(.copy-tooltip)').textContent = '📋';
+                        copyBtn.ariaLabel = 'Copy result';
+                    }, 2000);
+                });
+            };
+
+            container.appendChild(copyBtn);
+            element.appendChild(container);
+
+            // Proactively dismiss virtual keyboard and scroll into view
+            container.focus();
+        }
+>>>>>>> REPLACE

@@ -21,3 +21,6 @@
 ## 2024-10-27 - Double-Announcement via Focus + aria-live
 **Learning:** If an element is dynamically focused (e.g., using `element.focus()` with `tabindex="-1"`) after an asynchronous operation, screen readers will automatically read its contents because of the focus event. Adding `aria-live="polite"` to that same container causes the screen reader to announce it twice—once for the live region update, and once for the focus—resulting in confusing, stuttering verbosity.
 **Action:** When programmatically moving focus to a result container for accessibility, do not put `aria-live` on that container. Rely solely on the focus event to trigger the reading.
+## 2024-04-16 - Dismissing Mobile Virtual Keyboard on Form Submission
+**Learning:** When users submit a form on mobile web applications, the virtual keyboard remains active and covers the bottom of the screen, potentially obscuring dynamic success/error messages injected into the DOM. This is a poor user experience.
+**Action:** When rendering dynamic asynchronous results after a form submission, proactively dismiss the virtual keyboard and scroll the response into view by setting `tabindex="-1"` on the result container and calling `.focus()` on it in JS. Prevent the native focus ring by adding `.result-container:focus { outline: none; }` in CSS. This explicitly redirects focus away from inputs.
