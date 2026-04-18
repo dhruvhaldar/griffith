@@ -567,6 +567,9 @@
 
                         if (plotElement) plotElement.classList.add('stale');
                         if (plotElement) plotElement.setAttribute('title', 'Inputs modified. Recalculate to update.');
+                    } else if (resultDiv && resultDiv.classList.contains('error')) {
+                        clearResult(resultDiv);
+                        resultDiv.innerHTML = '<div class="empty-state"><span class="icon" aria-hidden="true">ℹ️</span><span>Enter parameters and click Calculate.</span></div>';
                     }
                 };
 

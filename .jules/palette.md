@@ -24,3 +24,7 @@
 ## 2024-04-16 - Dismissing Mobile Virtual Keyboard on Form Submission
 **Learning:** When users submit a form on mobile web applications, the virtual keyboard remains active and covers the bottom of the screen, potentially obscuring dynamic success/error messages injected into the DOM. This is a poor user experience.
 **Action:** When rendering dynamic asynchronous results after a form submission, proactively dismiss the virtual keyboard and scroll the response into view by setting `tabindex="-1"` on the result container and calling `.focus()` on it in JS. Prevent the native focus ring by adding `.result-container:focus { outline: none; }` in CSS. This explicitly redirects focus away from inputs.
+
+## 2024-11-04 - Clearing Global Error States on Input Modification
+**Learning:** Leaving a global form error visible while the user is actively modifying inputs creates cognitive dissonance—the UI is still shouting about an error that the user is actively trying to fix.
+**Action:** When implementing input modification listeners (like Stale State handlers), always clear any global error messages and restore them to a neutral/empty state as soon as the user begins typing, acknowledging their correction attempt.
