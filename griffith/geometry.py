@@ -6,13 +6,11 @@ from griffith.lefm import StressIntensityFactor
 _HALF_PI = math.pi * 0.5
 
 @lru_cache(maxsize=128)
-def _calculate_cct_y_scalar(crack_length, width):
+def _calculate_cct_y_scalar(crack_length, half_pi_inv_w):
     """
     Cached calculation for scalar inputs.
     """
-    alpha = crack_length / width
-    # ⚡ Bolt Optimization: Multiply by precomputed half pi instead of division by 2 and re-evaluating pi (~20% faster)
-    return math.sqrt(1.0 / math.cos(_HALF_PI * alpha))
+    return math.sqrt(1.0 / math.cos(crack_length * half_pi_inv_w))
 
 class CenterCrackedPlate(StressIntensityFactor):
     """
@@ -27,6 +25,7 @@ class CenterCrackedPlate(StressIntensityFactor):
         self.width = width
         self.crack_length = crack_length # 2a
         self._last_calc_crack_length = crack_length
+        self._half_pi_inv_w = _HALF_PI / width
         # Initial Y calculation based on current crack length
         super().__init__(self._calculate_geometry_factor(crack_length))
 
@@ -38,13 +37,12 @@ class CenterCrackedPlate(StressIntensityFactor):
         Y = sqrt(sec(pi * a / W)) (Approximation)
         """
         if np.isscalar(crack_length_2a):
-            return _calculate_cct_y_scalar(crack_length_2a, self.width)
+            return _calculate_cct_y_scalar(crack_length_2a, self._half_pi_inv_w)
 
-        alpha = crack_length_2a / self.width
         # Tada, Paris, Irwin formula for finite width correction
         # Y = sqrt(sec(pi * alpha / 2))
-        # ⚡ Bolt Optimization: Multiply by precomputed half np.pi instead of division by 2 and re-evaluating pi (~20% faster)
-        return np.sqrt(1.0 / np.cos(_HALF_PI * alpha))
+        # ⚡ Bolt Optimization: Combine division by width and multiplication by pi/2 into a precomputed instance-level inverse constant
+        return np.sqrt(1.0 / np.cos(crack_length_2a * self._half_pi_inv_w))
 
     def calculate_k1(self, stress, crack_length=None):
         """
