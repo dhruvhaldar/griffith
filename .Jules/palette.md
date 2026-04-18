@@ -131,3 +131,7 @@
 ## 2026-04-09 - Dynamic Document Titles for Contextual Awareness
 **Learning:** For multi-calculator single-page apps, when users copy results or switch tabs, the static document title provides no context about their current calculation.
 **Action:** Update the `document.title` to include the specific result (e.g., `K_I = 12.3 MPa√m | App Name`) immediately after calculation, and revert it to the base title when the inputs are modified or cleared. This significantly aids user orientation and multitasking.
+
+## 2026-04-18 - Immediate Error State Clearance on Correction
+**Learning:** Leaving a global error message visible while a user is actively modifying inputs to fix the error creates cognitive dissonance. The user doesn't know if their new input is valid until they submit again, and the persistent red error text can cause unnecessary anxiety.
+**Action:** When implementing input modification listeners (like Stale State handlers), always clear any global error messages and restore them to a neutral/empty state as soon as the user begins typing to immediately acknowledge their correction attempt.
