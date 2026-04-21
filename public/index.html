@@ -527,6 +527,18 @@
                 if (form.closest('#fatigue-calculator')) plotElement = document.getElementById('fatigue-plot');
 
                 const markStale = () => {
+                    // Palette: Clear global error states on input to acknowledge user correction attempt
+                    if (resultDiv && resultDiv.classList.contains('error')) {
+                        clearResult(resultDiv);
+                        resultDiv.innerHTML = `
+                            <div class="empty-state">
+                                <span class="icon" aria-hidden="true">ℹ️</span>
+                                <span>Enter parameters and click Calculate.</span>
+                            </div>
+                        `;
+                        return; // Nothing to mark as stale if we just cleared an error
+                    }
+
                     // Only mark stale if there's an actual result showing (not empty state or error)
                     if (resultDiv && resultDiv.querySelector('.result-container')) {
                         resultDiv.classList.add('stale');
