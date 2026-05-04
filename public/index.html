@@ -282,7 +282,7 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showError(resultDiv, "Error connecting to API.");
+                showError(resultDiv, "Error connecting to API. Please check your network connection and try again.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');
@@ -337,14 +337,14 @@
                         plotGrowth(c, m, stressRange, aInitial, aFinal, geometryFactor);
                     } catch (e) {
                         console.error('Plotly failed to load', e);
-                        showError(resultDiv, "Error loading chart library.");
+                        showError(resultDiv, "Error loading chart library. Please refresh the page and try again.");
                     }
                 } else {
                     showError(resultDiv, `Error: ${data.detail}`);
                 }
             } catch (error) {
                 console.error('Error:', error);
-                showError(resultDiv, "Error connecting to API.");
+                showError(resultDiv, "Error connecting to API. Please check your network connection and try again.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');
@@ -391,11 +391,11 @@
                         showResult(resultDiv, data.message);
                     }
                 } else {
-                    showError(resultDiv, "Error calculating R-Curve.");
+                    showError(resultDiv, "Error calculating R-Curve. Please verify your input parameters and try again.");
                 }
             } catch (error) {
                  console.error('Error:', error);
-                 showError(resultDiv, "Error connecting to API.");
+                 showError(resultDiv, "Error connecting to API. Please check your network connection and try again.");
             } finally {
                 btn.innerHTML = originalContent;
                 btn.classList.remove('loading');

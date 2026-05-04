@@ -32,3 +32,7 @@
 ## 2024-05-25 - Stable Numerical Displays with Tabular Nums
 **Learning:** When displaying dynamic numbers or calculated results, proportional fonts cause the text width to jitter horizontally as values change (e.g., '1' is narrower than '8'). This is especially noticeable in interactive calculators and live inputs.
 **Action:** Apply `font-variant-numeric: tabular-nums;` to inputs, result containers, and data tables to force monospaced digit widths within proportional fonts, ensuring a stable and polished visual experience without layout shifts.
+
+## 2026-05-04 - Maintaining role='alert' for Dynamic Errors
+**Learning:** When displaying dynamically injected error messages, the `role="alert"` attribute is critical for screen readers to immediately announce the error. Removing this attribute, even if the element is programmatically focused, degrades accessibility by preventing the necessary assertive announcement.
+**Action:** Always retain `role="alert"` on containers that dynamically display error messages to ensure proper screen reader notification.
