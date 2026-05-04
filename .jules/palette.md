@@ -28,3 +28,7 @@
 ## 2024-10-28 - Acknowledging Correction Attempts by Clearing Error States
 **Learning:** When a user receives a form error and subsequently begins to modify an input, continuing to display the error state (e.g. red borders, error messages) feels punitive and broken. The user is actively trying to correct the issue, and the UI should immediately acknowledge this by reverting to a neutral or "needs recalculation" state.
 **Action:** When implementing input modification listeners (like Stale State handlers), always check for and clear any global error messages, restoring the container to a neutral/empty state as soon as the user begins typing.
+
+## 2024-05-25 - Stable Numerical Displays with Tabular Nums
+**Learning:** When displaying dynamic numbers or calculated results, proportional fonts cause the text width to jitter horizontally as values change (e.g., '1' is narrower than '8'). This is especially noticeable in interactive calculators and live inputs.
+**Action:** Apply `font-variant-numeric: tabular-nums;` to inputs, result containers, and data tables to force monospaced digit widths within proportional fonts, ensuring a stable and polished visual experience without layout shifts.
