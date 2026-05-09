@@ -319,6 +319,10 @@ label:has(+ .input-wrapper > input:invalid)::before {
     outline: none;
 }
 
+.result-container:focus {
+    outline: none;
+}
+
 /* Palette: Hide Native Spin Buttons for Scientific Inputs */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
