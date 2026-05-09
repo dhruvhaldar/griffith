@@ -36,3 +36,7 @@
 ## 2026-05-04 - Maintaining role='alert' for Dynamic Errors
 **Learning:** When displaying dynamically injected error messages, the `role="alert"` attribute is critical for screen readers to immediately announce the error. Removing this attribute, even if the element is programmatically focused, degrades accessibility by preventing the necessary assertive announcement.
 **Action:** Always retain `role="alert"` on containers that dynamically display error messages to ensure proper screen reader notification.
+
+## 2024-05-26 - Dismissing Mobile Virtual Keyboard on Form Submission
+**Learning:** When users submit a form on mobile web applications, the virtual keyboard remains active and covers the bottom of the screen, potentially obscuring dynamic success/error messages injected into the DOM. This is a poor user experience.
+**Action:** When rendering dynamic asynchronous results after a form submission, proactively dismiss the virtual keyboard and scroll the response into view by setting `tabindex="-1"` on the result container and calling `.focus()` on it in JS. Prevent the native focus ring by adding `.result-container:focus { outline: none; }` in CSS. This explicitly redirects focus away from inputs.
