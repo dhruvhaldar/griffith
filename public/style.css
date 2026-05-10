@@ -95,7 +95,7 @@ button {
     box-sizing: border-box;
 }
 
-button:hover {
+button:hover:not(:disabled) {
     background-color: #1565C0;
 }
 
@@ -293,7 +293,7 @@ label:has(+ .input-wrapper > input:invalid)::before {
     box-sizing: border-box;
 }
 
-.copy-btn:hover {
+.copy-btn:hover:not(:disabled) {
     background-color: #e0e0e0;
 }
 

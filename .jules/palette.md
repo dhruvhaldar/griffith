@@ -40,3 +40,7 @@
 ## 2024-05-26 - Dismissing Mobile Virtual Keyboard on Form Submission
 **Learning:** When users submit a form on mobile web applications, the virtual keyboard remains active and covers the bottom of the screen, potentially obscuring dynamic success/error messages injected into the DOM. This is a poor user experience.
 **Action:** When rendering dynamic asynchronous results after a form submission, proactively dismiss the virtual keyboard and scroll the response into view by setting `tabindex="-1"` on the result container and calling `.focus()` on it in JS. Prevent the native focus ring by adding `.result-container:focus { outline: none; }` in CSS. This explicitly redirects focus away from inputs.
+
+## 2024-10-29 - Preventing Misleading Hover States on Disabled Elements
+**Learning:** When interactive elements like buttons are temporarily disabled (e.g., during asynchronous operations), applying standard `:hover` state styles (like background color changes) provides users with a false affordance of interactivity. This is misleading and creates a disjointed experience when the element is actually locked.
+**Action:** Always append the `:not(:disabled)` pseudo-class to `:hover` selectors for interactive elements (e.g., `button:hover:not(:disabled)`) to ensure visual hover feedback is strictly reserved for actionable states.
