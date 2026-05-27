@@ -147,7 +147,9 @@ class RCurveAnalysis:
         if np.isscalar(r_crit) and np.isscalar(a_crit):
              sigma_c = math.sqrt(r_crit * youngs_modulus / (geometry_factor * geometry_factor * math.pi * a_crit))
         else:
-             sigma_c = np.sqrt(r_crit * youngs_modulus / (geometry_factor * geometry_factor * np.pi * a_crit))
+             # ⚡ Bolt Optimization: Group all scalar terms into a single constant first before dividing by array to avoid multiple array allocations
+             scalar_factor = youngs_modulus / (geometry_factor * geometry_factor * np.pi)
+             sigma_c = np.sqrt((r_crit * scalar_factor) / a_crit)
 
         self.critical_values = {
             'delta_a': delta_a_crit,
