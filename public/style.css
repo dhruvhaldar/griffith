@@ -57,6 +57,8 @@ label {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.2s ease;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Palette: Active Label Highlight */
@@ -473,6 +475,11 @@ select:hover:not(:disabled) {
 /* Palette: Select Pointer Cursor */
 select {
     cursor: pointer;
+}
+
+/* Palette: Prevent Mobile Tap Highlight on Interactive Elements */
+a, button, input, select, label {
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* Palette: Active Focus Framing for Input Wrappers */

@@ -131,3 +131,7 @@
 ## 2026-04-09 - Dynamic Document Titles for Contextual Awareness
 **Learning:** For multi-calculator single-page apps, when users copy results or switch tabs, the static document title provides no context about their current calculation.
 **Action:** Update the `document.title` to include the specific result (e.g., `K_I = 12.3 MPa√m | App Name`) immediately after calculation, and revert it to the base title when the inputs are modified or cleared. This significantly aids user orientation and multitasking.
+
+## 2026-05-18 - Native Feel via Selection and Highlight Prevention
+**Learning:** Users on mobile devices or fast clickers on desktop can accidentally select label text when trying to quickly focus an input, breaking the illusion of a native app interface. Furthermore, mobile browsers add an ugly, gray transparent box (`-webkit-tap-highlight-color`) over interactive elements when tapped, which clashes with custom interaction states.
+**Action:** Add `user-select: none` (with vendor prefixes) to `<label>` elements to prevent accidental text selection, and apply `-webkit-tap-highlight-color: transparent` globally to interactive elements (`a, button, input, select, label`) to allow custom interaction styles to render cleanly without browser interference.
