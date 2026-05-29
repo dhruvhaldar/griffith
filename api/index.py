@@ -112,12 +112,14 @@ def calculate_j_integral(request: JIntegralRequest):
 def calculate_r_curve(request: RCurveRequest):
     # Hardcoded material resistance for demo: R = 150 + 400 * sqrt(da)  (kJ/m^2)
     # Optimization: Use math.sqrt(delta_a) instead of delta_a ** 0.5 for performance
+    # ⚡ Bolt Optimization: Pre-multiply 1000 into the formula coefficients to avoid a runtime multiplication
     def material_resistance(delta_a):
-        return (150 + 400 * math.sqrt(delta_a)) * 1000
+        return 150000 + 400000 * math.sqrt(delta_a)
 
     # Analytical derivative for performance: dR/da = 200 / sqrt(da) (kJ/m^3)
+    # ⚡ Bolt Optimization: Pre-multiply 1000 into the formula coefficients to avoid a runtime multiplication
     def material_resistance_derivative(delta_a):
-        return (200 / math.sqrt(delta_a)) * 1000
+        return 200000 / math.sqrt(delta_a)
 
     analysis = RCurveAnalysis(
         resistance_func=material_resistance,
