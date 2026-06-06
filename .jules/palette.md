@@ -44,3 +44,7 @@
 ## 2024-10-29 - Preventing Misleading Hover States on Disabled Elements
 **Learning:** When interactive elements like buttons are temporarily disabled (e.g., during asynchronous operations), applying standard `:hover` state styles (like background color changes) provides users with a false affordance of interactivity. This is misleading and creates a disjointed experience when the element is actually locked.
 **Action:** Always append the `:not(:disabled)` pseudo-class to `:hover` selectors for interactive elements (e.g., `button:hover:not(:disabled)`) to ensure visual hover feedback is strictly reserved for actionable states.
+
+## 2026-06-06 - Input Border Color Contrast
+**Learning:** Default light gray borders for inputs (like `#ccc`) and empty states (like `#bdc3c7`) often fail the WCAG 3.0:1 contrast ratio required for UI components. A darker gray like `#767676` is necessary for accessibility.
+**Action:** Always verify the contrast ratio of UI component boundaries against their background. Ensure borders and hover states (`#4b4b4b`) meet at least 3.0:1 contrast for accessibility.
